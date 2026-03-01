@@ -428,7 +428,22 @@ td code { font-size: 12px; }
 
 /* ── RESPONSIVE ── */
 @media(max-width: 1280px) { .toc-sidebar { display: none !important; } .main { margin-right: 0; } }
-@media(max-width: 900px) { .sidebar { display: none; } .main { margin-left: 0; margin-right: 0; } .welcome-cards, .product-suite-grid, .cards-grid, .arch-modules, .welcome-nav-cards { grid-template-columns: 1fr; } .token-grid { grid-template-columns: 1fr 1fr; } .content { padding: 32px 20px 80px; } }
+@media(max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; margin-right: 0; }
+  .welcome-cards, .product-suite-grid, .cards-grid, .arch-modules, .welcome-nav-cards { grid-template-columns: 1fr; }
+  .token-grid { grid-template-columns: 1fr 1fr; }
+  .content { padding: 32px 20px 80px; }
+  .ps-grid { grid-template-columns: 1fr; }
+  h1 { font-size: 24px; }
+  .page-subtitle { font-size: 14px; }
+  .contract-card { padding: 16px 14px; }
+  code { font-size: 11px; word-break: break-all; }
+  .addr-wrap { flex-wrap: wrap; }
+  .topbar { padding: 0 16px; }
+  .topbar-link { display: none; }
+  .btn-app { font-size: 11px; padding: 5px 12px; }
+}
 
 
 
