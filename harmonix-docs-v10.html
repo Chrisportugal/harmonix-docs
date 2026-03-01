@@ -31,8 +31,8 @@ body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', 
 ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
 /* ─── SIDEBAR ─── */
-.sidebar {
-  width: var(--sidebar); height: 100vh; background: var(--bg2);
+.sidebar { overflow-y: auto;
+  width: var(--sidebar); min-height: 100vh; background: var(--bg2);
   border-right: 1px solid var(--border); position: fixed; top: 0; left: 0;
   display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
 }
@@ -58,17 +58,12 @@ body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', 
   font-size: 10px; font-weight: 600; letter-spacing: 1.1px; text-transform: uppercase;
   color: var(--text3); padding: 14px 20px 5px; display: block;
 }
-.nav-item {
-  display: flex; align-items: center; gap: 9px; padding: 6px 20px;
-  font-size: 13.5px; color: var(--text2); text-decoration: none; cursor: pointer;
-  transition: all 0.15s; border-left: 2px solid transparent; line-height: 1.4;
-}
-.nav-item:hover { color: var(--text); background: var(--green-glow); }
-.nav-item.active { color: var(--green); background: var(--green-dim); border-left-color: var(--green); }
-.nav-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); flex-shrink: 0; transition: background 0.15s; }
-.nav-item.active .nav-dot { background: var(--green); }
-.nav-sub .nav-item { padding-left: 36px; font-size: 13px; }
-.nav-divider { border: none; border-top: 1px solid var(--border); margin: 10px 20px; }
+
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 14px; font-size: 13px; color: var(--text2); text-decoration: none; cursor: pointer; transition: all 0.15s; border-radius: 6px; margin: 1px 8px; line-height: 1.4; }
+.nav-item:hover { color: var(--text); background: var(--bg3); }
+.nav-item.active { color: var(--text); background: var(--bg3); font-weight: 500; }
+.nav-sub .nav-item { padding-left: 40px; font-size: 12.5px; }
+.nav-divider { border: none; border-top: 1px solid var(--border); margin: 6px 16px; }
 
 .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text3); }
 .sidebar-footer a { color: var(--text2); text-decoration: none; }
@@ -95,7 +90,7 @@ body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', 
 }
 .btn-app:hover { opacity: 0.85; }
 
-.content { max-width: var(--content); margin: 0 auto; padding: 52px 40px 100px; }
+.content { max-width: var(--content); margin: 0 auto; padding: 52px 40px 100px; position: relative; }
 .section { display: none; }
 .section.active { display: block; }
 
@@ -180,8 +175,15 @@ td code { font-size: 12px; }
 }
 .contract-card:first-of-type { margin-top: 24px; }
 .contract-card:hover { border-color: var(--border2); }
-.contract-card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap: wrap; }
-.contract-card-header .tag { margin-left:auto; }
+.contract-card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap: nowrap; }
+.contract-card-header .ticker-badge { font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; background:var(--green-dim); color:var(--green); border:1px solid rgba(180,230,100,0.25); padding:2px 8px; border-radius:5px; white-space:nowrap; flex-shrink:0; }
+.contract-card-header .card-title-block { display:flex; flex-direction:column; flex:1; min-width:0; }
+.contract-card-header .card-name { font-family:"Syne",sans-serif; font-weight:700; font-size:14px; color:var(--text); }
+.contract-card-header .card-tags { display:flex; gap:6px; margin-left:auto; flex-shrink:0; }
+.contract-card-row { display:grid; grid-template-columns:90px 1fr; gap:10px; align-items:center; padding:8px 0; border-top:1px solid var(--border); }
+.contract-card-row:first-of-type { border-top:none; }
+.contract-card-label { font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:0.8px; }
+.contract-card-val { font-size:13px; color:var(--text2); }
 
 /* ─── SEARCH BAR ─── */
 .search-wrap { position: relative; padding: 14px 20px; border-bottom: 1px solid var(--border); }
@@ -270,180 +272,250 @@ td code { font-size: 12px; }
   .arch-modules{grid-template-columns:1fr;}
 }
 
-/* ── PRODUCT TABS ── */
-.stable-tabs { display: flex; gap: 4px; margin: 28px 0 0; border-bottom: 1px solid var(--border); padding-bottom: 0; }
-.stable-tab {
-  background: none; border: none; padding: 9px 18px; font-size: 13.5px; font-weight: 500;
-  color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent;
-  margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; font-family: inherit;
-  border-radius: 6px 6px 0 0;
-}
-.stable-tab:hover { color: var(--text); background: var(--green-glow); }
-.stable-tab.active { color: var(--green); border-bottom-color: var(--green); }
-.stable-panel { display: none; padding-top: 28px; }
-.stable-panel.active { display: block; }
 
-/* ── PRODUCT GRID (Welcome) ── */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin: 28px 0 40px;
+
+
+
+
+
+
+
+/* shrink content to make room for toc */
+
+/* ── NAV ICONS ── */
+.nav-icon { width: 16px; height: 16px; min-width: 16px; max-width: 16px; min-height: 16px; max-height: 16px; flex-shrink: 0; opacity: 0.45; transition: opacity 0.15s; }
+.nav-item:hover .nav-icon { opacity: 0.75; }
+.nav-item.active .nav-icon { opacity: 1; color: var(--green); }
+.nav-sub .nav-icon { width: 10px; height: 10px; min-width: 10px; max-width: 10px; min-height: 10px; max-height: 10px; }
+
+/* ── COLLAPSIBLE NAV ── */
+.nav-group-toggle { display: flex; align-items: center; justify-content: space-between; padding: 7px 14px; margin: 1px 8px; cursor: pointer; border-radius: 6px; transition: background 0.15s; }
+.nav-group-toggle:hover { background: var(--bg3); }
+.nav-group-toggle-label { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); font-weight: 500; }
+.nav-group-toggle.open .nav-group-toggle-label { color: var(--text); }
+.nav-chevron { width: 14px; height: 14px; color: var(--text3); transition: transform 0.2s; flex-shrink: 0; }
+.nav-group-toggle.open .nav-chevron { transform: rotate(180deg); }
+.nav-collapse { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+.nav-collapse.open { max-height: 800px; }
+
+/* ── LAYOUT: main needs right margin for TOC ── */
+.main { margin-left: var(--sidebar); margin-right: 200px; }
+.toc-sidebar { position: fixed; top: 52px; right: 0; width: 200px; height: calc(100vh - 52px); overflow-y: auto; padding: 28px 16px 40px; border-left: 1px solid var(--border); background: var(--bg2); z-index: 40; }
+.toc-title { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; display: block; }
+.toc-link { display: block; font-size: 12.5px; color: var(--text3); text-decoration: none; padding: 4px 0 4px 10px; border-left: 1px solid transparent; line-height: 1.5; transition: all 0.15s; cursor: pointer; }
+.toc-link:hover { color: var(--text2); border-left-color: var(--border2); }
+.toc-link.active { color: var(--green); border-left-color: var(--green); }
+.toc-link.toc-h3 { padding-left: 20px; font-size: 12px; }
+
+/* ── PAGE HERO — no box ── */
+.page-hero { padding: 0 0 28px 0 !important; background: none !important; border-radius: 0 !important; border-top: none !important; border-left: none !important; border-right: none !important; overflow: visible !important; }
+.page-hero::before { display: none !important; }
+
+/* ── GRIDS ── */
+.welcome-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0 40px; }
+.product-suite-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0 40px; }
+.cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+.arch-modules { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+.stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 9px; padding: 16px 20px; flex: 1; }
+
+/* ── BREADCRUMB ── */
+.page-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); margin-bottom: 20px; flex-wrap: wrap; }
+.page-breadcrumb span { cursor: pointer; transition: color 0.15s; }
+.page-breadcrumb span:hover { color: var(--text2); }
+.page-breadcrumb .bc-sep { cursor: default; }
+.page-breadcrumb .bc-current { color: var(--green); cursor: default; }
+
+/* ── WELCOME & PRODUCT CARDS ── */
+.welcome-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 24px; cursor: pointer; transition: border-color 0.2s, transform 0.2s; display: flex; align-items: center; gap: 18px; }
+.welcome-card:hover { border-color: rgba(180,230,100,0.35); transform: translateY(-2px); }
+.welcome-card-icon { width: 48px; height: 48px; background: var(--green-dim); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.welcome-card-icon svg { width: 22px; height: 22px; color: var(--green); }
+.welcome-card-content { flex: 1; }
+.welcome-card-title { font-family: "Syne", sans-serif; font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 5px; }
+.welcome-card-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+.welcome-card-arrow { width: 18px; height: 18px; color: var(--text3); flex-shrink: 0; transition: color 0.15s, transform 0.15s; }
+.welcome-card:hover .welcome-card-arrow { color: var(--green); transform: translateX(3px); }
+.ps-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.2s; }
+.ps-card:hover { border-color: rgba(180,230,100,0.3); transform: translateY(-2px); }
+.ps-card-header { height: 100px; display: flex; align-items: flex-end; padding: 14px 18px; position: relative; overflow: hidden; }
+.ps-card-header::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(200,240,122,0.18) 0%, transparent 65%); }
+.ps-green { background: linear-gradient(135deg, #1a2a18 0%, #243220 100%); }
+.ps-green2 { background: linear-gradient(135deg, #182418 0%, #1e2e1a 100%); }
+.ps-yellow { background: linear-gradient(135deg, #28220e 0%, #302810 100%); }
+.ps-orange { background: linear-gradient(135deg, #28180e 0%, #301e10 100%); }
+.ps-card-tokens { display: flex; gap: 6px; flex-wrap: wrap; position: relative; z-index: 1; }
+.ps-card-body { padding: 18px 18px 20px; }
+.ps-card-title { font-family: "Syne", sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 7px; }
+.ps-card-desc { font-size: 13px; color: var(--text2); line-height: 1.55; margin-bottom: 12px; }
+.ps-card-link { font-size: 12px; color: var(--green); font-weight: 500; }
+
+/* ── GLASS SIDEBAR ── */
+.sidebar { background: rgba(18,22,16,0.45) !important; backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border-right: 1px solid rgba(200,240,122,0.1) !important; }
+
+/* ── SIDEBAR FOOTER ICONS ── */
+.sidebar-footer { padding: 14px 20px; border-top: 1px solid rgba(200,240,122,0.08); display: flex; gap: 14px; align-items: center; }
+.sf-icon { color: var(--text3); text-decoration: none; transition: color 0.15s; display: flex; align-items: center; }
+.sf-icon:hover { color: var(--green); }
+
+/* ── BACKGROUND FLAIR ── */
+.content::before {
+  content: "";
+  position: fixed;
+  top: -120px;
+  right: 160px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(180,230,100,0.055) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
 }
-.product-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: border-color 0.18s, transform 0.18s;
+.content::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 30%;
+  width: 500px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(80,160,255,0.028) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
 }
-.product-card:hover {
-  border-color: var(--border2);
-  transform: translateY(-2px);
-}
-.product-card-banner {
-  height: 110px;
-  display: flex;
-  align-items: flex-end;
-  padding: 14px 16px;
-  position: relative;
-  overflow: hidden;
-}
-.product-banner-stable {
-  background: linear-gradient(135deg, #1a2a1a 0%, #2a3a20 50%, #1e2e18 100%);
-}
-.product-banner-hype {
-  background: linear-gradient(135deg, #1c2a18 0%, #263018 50%, #1e281a 100%);
-}
-.product-banner-cd {
-  background: linear-gradient(135deg, #1e2018 0%, #2a2c18 50%, #222018 100%);
-}
-.product-banner-har {
-  background: linear-gradient(135deg, #201a10 0%, #302414 50%, #261e10 100%);
-}
-.product-banner-dev {
-  background: linear-gradient(135deg, #181e28 0%, #1c2430 50%, #18202a 100%);
-}
-.product-banner-points {
-  background: linear-gradient(135deg, #1c1818 0%, #261c1c 50%, #1e1818 100%);
-}
-.product-card-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 70% 30%, rgba(200,240,122,0.12) 0%, transparent 65%);
-}
-.product-banner-tokens {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  position: relative;
-  z-index: 1;
-}
-.pbt {
-  background: rgba(200,240,122,0.12);
-  border: 1px solid rgba(200,240,122,0.25);
-  color: var(--green);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  padding: 3px 9px;
-  border-radius: 5px;
-  letter-spacing: 0.3px;
-}
-.product-card-body {
-  padding: 16px 18px 18px;
-}
-.product-card-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-.product-card-desc {
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.55;
-}
-@media(max-width:760px){
-  .product-grid { grid-template-columns: 1fr 1fr; }
-}
-@media(max-width:480px){
-  .product-grid { grid-template-columns: 1fr; }
-}
+.content > * { position: relative; z-index: 1; }
+
+
+/* ── PRODUCT SUITE PAGE ── */
+.ps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 28px 0 40px; }
+.ps-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; cursor: pointer; transition: border-color 0.22s, transform 0.22s; display: flex; flex-direction: column; }
+.ps-item:hover { border-color: rgba(180,230,100,0.32); transform: translateY(-3px); }
+.ps-item-banner { height: 140px; position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 14px 16px; }
+.ps-item-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.45) 100%); }
+.ps-banner-stable { background: linear-gradient(135deg, #162a14 0%, #1e3a1a 50%, #152e12 100%); }
+.ps-banner-hype   { background: linear-gradient(135deg, #1a2a18 0%, #1e3320 50%, #162a14 100%); }
+.ps-banner-cd     { background: linear-gradient(135deg, #26200a 0%, #2e2808 50%, #231e08 100%); }
+.ps-banner-har    { background: linear-gradient(135deg, #2a1a08 0%, #321e08 50%, #261808 100%); }
+.ps-banner-dev    { background: linear-gradient(135deg, #10172a 0%, #151e35 50%, #111828 100%); }
+.ps-banner-pts    { background: linear-gradient(135deg, #1e1028 0%, #261430 50%, #1a0e24 100%); }
+.ps-item-banner::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 25%, rgba(200,240,122,0.16) 0%, transparent 60%); z-index: 0; }
+.ps-banner-dev::before { background: radial-gradient(ellipse at 75% 25%, rgba(80,140,255,0.16) 0%, transparent 60%); }
+.ps-banner-pts::before { background: radial-gradient(ellipse at 75% 25%, rgba(180,80,255,0.13) 0%, transparent 60%); }
+.ps-banner-har::before { background: radial-gradient(ellipse at 75% 25%, rgba(245,150,50,0.13) 0%, transparent 60%); }
+.ps-banner-cd::before  { background: radial-gradient(ellipse at 75% 25%, rgba(245,200,66,0.12) 0%, transparent 60%); }
+.ps-item-tags { display: flex; gap: 6px; flex-wrap: wrap; position: relative; z-index: 1; }
+.ps-tag { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 3px 9px; border-radius: 6px; border: 1px solid rgba(200,240,122,0.25); background: rgba(0,0,0,0.35); color: var(--green); font-weight: 500; backdrop-filter: blur(4px); }
+.ps-banner-dev .ps-tag { border-color: rgba(80,140,255,0.3); color: #6ea8fe; }
+.ps-banner-pts .ps-tag { border-color: rgba(180,80,255,0.3); color: #c084fc; }
+.ps-banner-har .ps-tag { border-color: rgba(245,150,50,0.3); color: #fb923c; }
+.ps-banner-cd .ps-tag  { border-color: rgba(245,200,66,0.3); color: var(--yellow); }
+.ps-item-body { padding: 18px 18px 20px; flex: 1; }
+.ps-item-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 8px; }
+.ps-item-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+@media(max-width:900px) { .ps-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width:600px) { .ps-grid { grid-template-columns: 1fr; } }
+
+/* ── WELCOME NAV CARDS ── */
+.welcome-nav-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 32px 0 40px; }
+.wnc { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; transition: border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+.wnc:hover { border-color: rgba(180,230,100,0.35); transform: translateY(-2px); }
+.wnc-icon { height: 120px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a2a18 0%, #243220 100%); position: relative; overflow: hidden; }
+.wnc-icon::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 30%, rgba(200,240,122,0.15) 0%, transparent 65%); }
+.wnc-icon svg { width: 36px; height: 36px; color: var(--green); opacity: 0.85; position: relative; z-index: 1; }
+.wnc-icon-dev { background: linear-gradient(135deg, #151e2a 0%, #1b2535 100%); }
+.wnc-icon-dev::before { background: radial-gradient(ellipse at 70% 30%, rgba(80,140,255,0.12) 0%, transparent 65%); }
+.wnc-icon-dev svg { color: #6ea8fe; }
+.wnc-body { padding: 20px 20px 22px; }
+.wnc-title { font-family: "Syne", sans-serif; font-weight: 700; font-size: 15px; color: var(--text); margin-bottom: 7px; }
+.wnc-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+/* ── RESPONSIVE ── */
+@media(max-width: 1280px) { .toc-sidebar { display: none !important; } .main { margin-right: 0; } }
+@media(max-width: 900px) { .sidebar { display: none; } .main { margin-left: 0; margin-right: 0; } .welcome-cards, .product-suite-grid, .cards-grid, .arch-modules, .welcome-nav-cards { grid-template-columns: 1fr; } .token-grid { grid-template-columns: 1fr 1fr; } .content { padding: 32px 20px 80px; } }
+
+
 
 </style>
+<script src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"></script>
 </head>
 <body>
 
 <!-- ─── SIDEBAR ─── -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark">
-      <svg viewBox="0 0 18 18" fill="none"><path d="M9 2L15 5.5V12.5L9 16L3 12.5V5.5L9 2Z" fill="#1a2a08"/></svg>
-    </div>
-    <span class="logo-text">Harmonix</span>
-    <span class="version-badge">V2</span>
+    <div class="sidebar-logo" style="padding: 20px 20px 18px;">
+    <svg viewBox="0 0 146 28" xmlns="http://www.w3.org/2000/svg" style="height:22px;width:auto;fill:#ffffff;">
+      <g>
+        <g>
+          <path d="M25,3.4c-5.9-3.4-11.3,1-15.2,7.9L3.3,7.5c-4,6.9-5.1,13.7,0.8,17.1s11.3-1,15.2-7.9l6.5,3.7C29.8,13.6,30.9,6.8,25,3.4z M18.2,16.1c-2.3,4-5.1,6.7-7.8,5.1c-2.7-1.5-1.7-5.3,0.6-9.3s5.1-6.7,7.8-5.2C21.4,8.3,20.5,12.1,18.2,16.1z"/>
+        </g>
+        <path d="M73.9,24.5c-1.1,0-2.1-0.7-2.6-1.6c-0.3,0.3-0.6,0.5-1,0.7c-1,0.6-2.1,0.8-3.3,0.8c-1.2,0-2.3-0.3-3.3-0.8c-1-0.6-1.8-1.4-2.3-2.3c-0.6-1-0.8-2.1-0.8-3.3c0-1.2,0.3-2.3,0.8-3.2c0.6-1,1.4-1.7,2.3-2.3c1-0.6,2.1-0.9,3.3-0.9s2.3,0.3,3.3,0.8c0.2,0.1,0.5,0.3,0.7,0.5v-1.3h3L73.9,24.5L73.9,24.5z M58.7,21c0,1.9-1.5,3.5-3.5,3.5v-9.3h-9.9V21c0,1.9-1.5,3.5-3.5,3.5V7c0-1.9,1.5-3.5,3.5-3.5V12h9.9V7c0-1.9,1.5-3.5,3.5-3.5C58.7,3.5,58.7,21,58.7,21z M109.8,11.6c1.2,0,2.3,0.3,3.3,0.9c1,0.6,1.7,1.3,2.3,2.3c0.6,1,0.9,2,0.9,3.2s-0.3,2.3-0.9,3.3s-1.3,1.8-2.3,2.3c-1,0.6-2.1,0.9-3.3,0.9c-1.2,0-2.3-0.3-3.3-0.9s-1.8-1.4-2.3-2.3c-0.6-1-0.8-2.1-0.8-3.3c0-1.2,0.3-2.3,0.8-3.2c0.6-1,1.4-1.7,2.3-2.3C107.5,11.9,108.6,11.6,109.8,11.6z M135,12.1c1.4,0,2.6,0.7,3.4,1.8l1.5,2.1l1.4-2.1c0.8-1.1,2.1-1.8,3.4-1.8h1.1l-4.3,6l4.5,6.4h-2.2c-0.8,0-1.5-0.4-1.9-1l-2.2-3.2l-2.2,3.2c-0.4,0.6-1.2,1-1.9,1h-2.1l4.6-6.3l-4.4-6L135,12.1L135,12.1z M96.7,11.8c2.7,0,4.8,2.1,4.9,4.8l0,0v7.9h-2.8v-7.9l0,0c0-1.1-0.9-2-2.1-2c-1.1,0-2,0.9-2.1,2l0,0v7.9h-2.8v-7.9l0,0c0-1.1-0.9-2-2.1-2c-1.1,0-2,0.9-2.1,2l0,0v7.9h-2.8v-8l0,0c0.1-2.6,2.3-4.6,4.9-4.6c1.4,0,2.6,0.6,3.5,1.5C94.1,12.4,95.3,11.8,96.7,11.8z M122.8,11.8c2.7,0,4.8,2.1,4.9,4.8l0,0v7.9h-2.8v-7.9l0,0c0-1.1-0.9-2-2.1-2c-1.1,0-2,0.9-2.1,2l0,0v7.9h-2.8v-8l0,0C118,13.9,120.2,11.8,122.8,11.8z M129.9,12.1c1.6,0,2.8,1.3,2.8,2.8v9.5h-2.8V12.1z M81,12.1c1.1,0,2,0.2,2.6,0.3c0.3,0.1,0.5,0.2,0.7,0.3c0.1,0,0.2,0.1,0.2,0.1h0.1l0,0l0,0l0,0l0,0l0,0c0,0,0,0-0.8,1.2S83,15.2,83,15.2l0,0l0,0l0,0l0,0l0,0l0,0c0,0-0.2-0.1-0.3-0.1c-0.2,0-0.8-0.1-1.7-0.1c-1.1,0-2,0.9-2,2v7.4h-2.9V17C76.1,14.3,78.3,12.1,81,12.1z M67,14.3c-0.7,0-1.3,0.2-1.9,0.5c-0.5,0.3-1,0.7-1.3,1.3c-0.3,0.5-0.4,1.2-0.4,1.9c0,0.7,0.1,1.4,0.4,1.9c0.3,0.6,0.7,1,1.3,1.3c0.5,0.3,1.2,0.5,1.9,0.5c0.7,0,1.3-0.2,1.9-0.5c0.5-0.3,1-0.8,1.3-1.3c0.3-0.6,0.5-1.2,0.5-1.9c0-0.7-0.2-1.4-0.5-1.9s-0.7-1-1.3-1.3C68.3,14.5,67.7,14.3,67,14.3z M109.8,14.3c-0.7,0-1.3,0.2-1.8,0.5s-0.9,0.7-1.3,1.3c-0.3,0.5-0.4,1.2-0.4,1.9c0,0.7,0.1,1.4,0.4,1.9c0.3,0.6,0.7,1,1.3,1.3c0.5,0.3,1.2,0.5,1.8,0.5c0.7,0,1.3-0.2,1.8-0.5s1-0.8,1.3-1.3c0.3-0.6,0.5-1.2,0.5-1.9c0-0.7-0.2-1.4-0.5-1.9s-0.7-1-1.3-1.3C111.1,14.5,110.5,14.3,109.8,14.3z M131.1,7.4c0.9,0,1.6,0.7,1.6,1.6s-0.7,1.6-1.6,1.6c-0.9,0-1.6-0.7-1.6-1.6C129.5,8.1,130.2,7.4,131.1,7.4z"/>
+      </g>
+    </svg>
+    
   </div>
-  <div class="search-wrap">
-    <span class="search-icon">⌕</span>
-    <input class="search-input" type="text" placeholder="Search docs…" id="doc-search" oninput="filterNav(this.value)">
-  </div>
+
   <nav class="sidebar-nav" id="sidebar-nav-wrap">
     <div class="nav-group">
-      <span class="nav-label">Getting Started</span>
-      <a class="nav-item active" onclick="show('welcome',this)"><span class="nav-dot"></span>Welcome</a>
-      <a class="nav-item" onclick="show('overview',this)"><span class="nav-dot"></span>Protocol Overview</a>
-      <a class="nav-item" onclick="show('architecture',this)"><span class="nav-dot"></span>Technical Architecture</a>
+      <a class="nav-item active" onclick="show('welcome',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Welcome</a>
+      <a class="nav-item" onclick="show('overview',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>Protocol Overview</a>
     </div>
     <hr class="nav-divider">
     <div class="nav-group">
-      <span class="nav-label">Products</span>
-      <a class="nav-item nav-parent" onclick="show('stablecoins',this)"><span class="nav-dot"></span>Yield-Bearing Stablecoins</a>
-      <div class="nav-sub">
-        <a class="nav-item" onclick="show('stablecoins',this);showStableTab('tab-hausdc')"><span class="nav-dot"></span>haUSDC</a>
-        <a class="nav-item" onclick="show('stablecoins',this);showStableTab('tab-hausdt')"><span class="nav-dot"></span>haUSDT</a>
-        <a class="nav-item" onclick="show('stablecoins',this);showStableTab('tab-hausdh')"><span class="nav-dot"></span>haUSDH</a>
+      <div class="nav-group-toggle open" onclick="toggleNav(this)">
+        <span class="nav-group-toggle-label" style="cursor:pointer;" onclick="show('product-suite',null)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Product Suite</span>
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <a class="nav-item nav-parent" onclick="show('tokens',this)"><span class="nav-dot"></span>Yield-Bearing Tokens</a>
-      <div class="nav-sub">
-        <a class="nav-item" onclick="show('tokens',this);showTokenTab('tab-hahype')"><span class="nav-dot"></span>haHYPE</a>
-        <a class="nav-item" onclick="show('tokens',this);showTokenTab('tab-hakhype')"><span class="nav-dot"></span>hakHYPE</a>
+      <div class="nav-collapse open">
+        <a class="nav-item" onclick="show('stablecoins',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M9 9.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 2-3 2-3 .8-3 2 1.3 2 3 2 3-.5 3-1.5"/></svg>Yield-Bearing Stablecoins</a>
+        <div class="nav-sub">
+          <a class="nav-item" onclick="show('stablecoins',this);showStableTab('tab-hausdc')"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="3"/></svg>haUSDC</a>
+          <a class="nav-item" onclick="show('stablecoins',this);showStableTab('tab-hausdt')"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="3"/></svg>haUSDT</a>
+          <a class="nav-item" onclick="show('stablecoins',this);showStableTab('tab-hausdh')"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="3"/></svg>haUSDH</a>
+        </div>
+        <a class="nav-item" onclick="show('tokens',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Yield-Bearing Tokens</a>
+        <div class="nav-sub">
+          <a class="nav-item" onclick="show('tokens',this);showTokenTab('tab-hahype')"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="3"/></svg>haHYPE</a>
+          <a class="nav-item" onclick="show('tokens',this);showTokenTab('tab-hakhype')"><svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="3"/></svg>hakHYPE</a>
+        </div>
+        <a class="nav-item" onclick="show('cdharusd',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>cdharUSD</a>
+        <a class="nav-item" onclick="show('har',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>HAR Token</a>
+        <a class="nav-item" onclick="show('xhar',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>xHAR</a>
       </div>
-      <a class="nav-item" onclick="show('cdharusd',this)"><span class="nav-dot"></span>cdharUSD</a>
     </div>
     <hr class="nav-divider">
     <div class="nav-group">
-      <span class="nav-label">Tokenomics</span>
-      <a class="nav-item" onclick="show('har',this)"><span class="nav-dot"></span>HAR Token</a>
-      <a class="nav-item" onclick="show('xhar',this)"><span class="nav-dot"></span>xHAR (Staked HAR)</a>
-    </div>
-    <hr class="nav-divider">
-    <div class="nav-group">
-      <span class="nav-label">For Developers</span>
-      <a class="nav-item" onclick="show('vault-arch',this)"><span class="nav-dot"></span>Vault Architecture</a>
-      <a class="nav-item" onclick="show('contracts',this)"><span class="nav-dot"></span>Smart Contracts</a>
-      <a class="nav-item" onclick="show('deposits-withdrawals',this)"><span class="nav-dot"></span>Deposits & Withdrawals</a>
+      <div class="nav-group-toggle open" onclick="toggleNav(this)">
+        <span class="nav-group-toggle-label"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m10 13-2 2 2 2M14 13l2 2-2 2"/></svg>For Developers</span>
+        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="nav-collapse open">
+        <a class="nav-item" onclick="show('architecture',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>Capital Allocation</a>
+        <a class="nav-item" onclick="show('vault-arch',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>Vault Architecture</a>
+        <a class="nav-item" onclick="show('contracts',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m10 13-2 2 2 2M14 13l2 2-2 2"/></svg>Smart Contracts</a>
+        <a class="nav-item" onclick="show('deposits-withdrawals',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>Deposits & Withdrawals</a>
+      </div>
     </div>
     <hr class="nav-divider">
     <div class="nav-group">
       <span class="nav-label">Security</span>
-      <a class="nav-item" onclick="show('solvency',this)"><span class="nav-dot"></span>Proof of Solvency</a>
-      <a class="nav-item" onclick="show('risks',this)"><span class="nav-dot"></span>Risks & Audits</a>
+      <a class="nav-item" onclick="show('solvency',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Proof of Solvency</a>
+      <a class="nav-item" onclick="show('risks',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m10.29 3.86-8.57 14.86A2 2 0 0 0 3.43 22h17.14a2 2 0 0 0 1.71-3L13.71 4.14a2 2 0 0 0-3.42-.28z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Risks & Audits</a>
     </div>
     <hr class="nav-divider">
     <div class="nav-group">
       <span class="nav-label">Resources</span>
-      <a class="nav-item" onclick="show('points',this)"><span class="nav-dot"></span>Points & Rewards</a>
-      <a class="nav-item" onclick="show('faq',this)"><span class="nav-dot"></span>FAQ</a>
+      <a class="nav-item" onclick="show('points',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Points & Rewards</a>
+      <a class="nav-item" onclick="show('faq',this)"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>FAQ</a>
     </div>
-  </nav><!-- /sidebar-nav-wrap -->
+  </nav>
+  <!-- /sidebar-nav-wrap -->
   <div class="sidebar-footer">
-    <a href="https://harmonix.fi" target="_blank">harmonix.fi</a> &middot;
-    <a href="https://twitter.com/harmonixfi" target="_blank">Twitter</a> &middot;
-    <a href="https://discord.gg/harmonix" target="_blank">Discord</a>
+    <a href="https://twitter.com/harmonixfi" target="_blank" title="Twitter / X" class="sf-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a href="https://discord.gg/harmonix" target="_blank" title="Discord" class="sf-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.08.11 18.1.132 18.115a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+    </a>
+    <a href="https://github.com/harmonixfi" target="_blank" title="GitHub" class="sf-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+    </a>
   </div>
 </aside>
 
@@ -455,101 +527,69 @@ td code { font-size: 12px; }
       <span class="sep">/</span>
       <span class="page" id="breadcrumb-page">Welcome</span>
     </div>
-    <div class="topbar-actions">
+    <div class="topbar-actions"><div style="position:relative;">
+      <svg style="position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;stroke:#4e6358;stroke-width:2;fill:none;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input style="background:#2a2a27;border:1px solid #333330;border-radius:7px;padding:6px 12px 6px 30px;font-size:12px;color:#e2ede8;outline:none;width:160px;font-family:inherit;" type="text" placeholder="Search docs…" id="doc-search" oninput="filterNav(this.value)">
+    </div>
+      <a class="topbar-link" href="https://discord.gg/harmonix" target="_blank" style="display:flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.1 18.08.11 18.1.132 18.115a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        Get Help
+      </a>
       <a class="topbar-link" href="https://github.com/harmonixfi" target="_blank">GitHub</a>
-      <a class="topbar-link" href="#" onclick="show('risks',null)">Audits</a>
       <a class="btn-app" href="https://harmonix.fi/app" target="_blank">Launch App →</a>
     </div>
   </div>
 
+  
+  
+<aside class="toc-sidebar" id="toc-sidebar">
+  <span class="toc-title">On this page</span>
+  <nav id="toc-nav"></nav>
+</aside>
+
   <div class="content">
+
 
     <!-- ── WELCOME ── -->
     <section class="section active" id="s-welcome">
       <div class="page-hero">
         <span class="page-tag">Documentation</span>
         <h1>Harmonix Finance</h1>
-        <p class="page-subtitle">Yield infrastructure built natively on Hyperliquid. Real funding income, market-neutral strategies, composable yield-bearing tokens.</p>
+        <p class="page-subtitle">Yield infrastructure built natively on Hyperliquid — turning deep, performant liquidity into sustainable on-chain yield.</p>
       </div>
 
-      <p>Harmonix is a yield infrastructure protocol built natively on <a href="https://hyperliquid.xyz" target="_blank">Hyperliquid</a>. It captures real economic activity — perpetual funding rates, lending yields, and ecosystem incentives across HyperCore and HyperEVM — and distributes that yield through a suite of yield-bearing tokens.</p>
-      <p>Browse the product suite below or navigate directly from the sidebar.</p>
+      <p>Harmonix captures real economic activity — perpetual funding rates, lending yields, and ecosystem incentives across HyperCore and HyperEVM — and distributes that yield through a suite of composable yield-bearing tokens and the HAR ecosystem.</p>
+      <p>This documentation is your complete reference for understanding how Harmonix works, how to use it, and how to build on top of it.</p>
 
-      <div class="product-grid">
-        <div class="product-card" onclick="show('stablecoins',null)">
-          <div class="product-card-banner product-banner-stable">
-            <div class="product-banner-tokens">
-              <span class="pbt">haUSDC</span>
-              <span class="pbt">haUSDT</span>
-              <span class="pbt">haUSDH</span>
-            </div>
+      <h2>What You'll Find Here</h2>
+      <p><strong>Protocol Overview.</strong> What Harmonix is, the problems it solves, and how it is built natively on the Hyperliquid stack.</p>
+      <p><strong>Product Suite.</strong> Plain-language explanations of Harmonix's yield-bearing stablecoins, yield-bearing tokens, convertible deposits, and the HAR token — what they are, how they work, and why they're built the way they are.</p>
+      <p><strong>For Developers.</strong> Architecture documentation, smart contract references, vault specs and integration guides for builders working with Harmonix on HyperEVM.</p>
+      <p><strong>Security.</strong> Proof of solvency, risk disclosures, and audit information across all Harmonix products.</p>
+      <p><strong>Resources.</strong> Points &amp; Rewards programs, partner protocol incentives, and FAQ.</p>
+
+      <p style="margin-top:16px;color:var(--text3);">Harmonix is designed to grow with you — whether you're learning what yield-bearing tokens are for the first time or architecting a new integration on HyperEVM. Choose a section below to begin.</p>
+
+      <div class="welcome-nav-cards">
+        <div class="wnc" onclick="show('product-suite',null)">
+          <div class="wnc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
           </div>
-          <div class="product-card-body">
-            <div class="product-card-title">Yield-Bearing Stablecoins</div>
-            <div class="product-card-desc">USD-pegged tokens generating sustainable on-chain yield through market-neutral strategies, while maintaining a tight $1 peg.</div>
-          </div>
-        </div>
-        <div class="product-card" onclick="show('tokens',null)">
-          <div class="product-card-banner product-banner-hype">
-            <div class="product-banner-tokens">
-              <span class="pbt">haHYPE</span>
-              <span class="pbt">hakHYPE</span>
-            </div>
-          </div>
-          <div class="product-card-body">
-            <div class="product-card-title">Yield-Bearing Tokens</div>
-            <div class="product-card-desc">Yield-enhanced versions of HYPE and kHYPE that automatically compound funding income and ecosystem rewards into your position.</div>
+          <div class="wnc-body">
+            <div class="wnc-title">Product Suite →</div>
+            <div class="wnc-desc">Explore yield-bearing stablecoins, tokens, convertible deposits, and the HAR tokenomics ecosystem.</div>
           </div>
         </div>
-        <div class="product-card" onclick="show('cdharusd',null)">
-          <div class="product-card-banner product-banner-cd">
-            <div class="product-banner-tokens">
-              <span class="pbt">cdharUSD3</span>
-            </div>
+        <div class="wnc" onclick="show('vault-arch',null)">
+          <div class="wnc-icon wnc-icon-dev">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 8l-4 4 4 4"/><path d="M17 8l4 4-4 4"/><path d="M14 4l-4 16"/></svg>
           </div>
-          <div class="product-card-body">
-            <div class="product-card-title">Convertible Deposits</div>
-            <div class="product-card-desc">Fixed-yield deposits with optional conversion into HAR at a locked price. Stable yield floor with protocol upside optionality.</div>
-          </div>
-        </div>
-        <div class="product-card" onclick="show('har',null)">
-          <div class="product-card-banner product-banner-har">
-            <div class="product-banner-tokens">
-              <span class="pbt">HAR</span>
-              <span class="pbt">xHAR</span>
-            </div>
-          </div>
-          <div class="product-card-body">
-            <div class="product-card-title">HAR Token</div>
-            <div class="product-card-desc">The native Harmonix token that captures protocol growth, aligns long-term incentives, and governs ecosystem direction.</div>
-          </div>
-        </div>
-        <div class="product-card" onclick="show('vault-arch',null)">
-          <div class="product-card-banner product-banner-dev">
-            <div class="product-banner-tokens">
-              <span class="pbt">ERC-4626</span>
-            </div>
-          </div>
-          <div class="product-card-body">
-            <div class="product-card-title">Developer Resources</div>
-            <div class="product-card-desc">Architecture docs, smart contract references, and integration guides for builders working with Harmonix vaults on HyperEVM.</div>
-          </div>
-        </div>
-        <div class="product-card" onclick="show('points',null)">
-          <div class="product-card-banner product-banner-points">
-            <div class="product-banner-tokens">
-              <span class="pbt">Points</span>
-              <span class="pbt">Rewards</span>
-            </div>
-          </div>
-          <div class="product-card-body">
-            <div class="product-card-title">Points &amp; Incentives</div>
-            <div class="product-card-desc">How Harmonix Points accrue, partner protocol point programs, and the overall incentive layer structure.</div>
+          <div class="wnc-body">
+            <div class="wnc-title">Developers →</div>
+            <div class="wnc-desc">Architecture docs, smart contract references, vault specs and integration guides for builders on HyperEVM.</div>
           </div>
         </div>
       </div>
-
-
 
       <div class="page-nav">
         <div></div>
@@ -562,56 +602,120 @@ td code { font-size: 12px; }
 
     <!-- ── OVERVIEW ── -->
     <section class="section" id="s-overview">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Protocol Overview</span></div>
       <div class="page-hero">
         <span class="page-tag">Getting Started</span>
         <h1>Protocol Overview</h1>
-        <p class="page-subtitle">How Harmonix is structured and why it's built this way.</p>
+        <p class="page-subtitle">What Harmonix is, the problems it solves, and how it's built on Hyperliquid.</p>
       </div>
 
-      <h2>Four Problems We Solve</h2>
+      <h2>What is Harmonix?</h2>
+      <p>Harmonix is a yield infrastructure protocol built natively on Hyperliquid. It captures real economic activity — perpetual funding rates, lending yields, and ecosystem incentives across HyperCore and HyperEVM — and distributes that yield through a suite of yield-bearing tokens: haUSDC, haUSDH, haUSDT, haHYPE, and hakHYPE.</p>
+      <p>The design goal is straightforward: reuse the same unit of capital across multiple yield sources, price risk from real executable activity rather than static assumptions, and route protocol cashflows back to users in a transparent, programmatic way.</p>
 
-      <h3>1. Capital Isolation</h3>
-      <p>In most DeFi systems, capital is siloed by product. Harmonix enables a single deposit to back funding strategies, lending, and ecosystem yield simultaneously — all while continuing to accrue base returns.</p>
-
-      <h3>2. Static Yield Strategies</h3>
-      <p>Most yield products rely on fixed allocations or single-protocol exposure. Harmonix uses dynamic strategies that adapt to funding rates, volatility, and ecosystem conditions in real time. When rates compress, capital rotates automatically.</p>
-
-      <h3>3. Directional Risk</h3>
+      <h2>The Problems We Solve</h2>
+      <h3>Capital Isolation</h3>
+      <p>In most DeFi systems, capital is siloed by product. A stablecoin deposit earns from one protocol. A staking position earns from another. Harmonix enables a single deposit to back funding strategies, lending, and ecosystem yield simultaneously — all while continuing to accrue base returns.</p>
+      <h3>Static Yield Strategies</h3>
+      <p>Most yield products rely on fixed allocations or single-protocol exposure. Harmonix uses dynamic strategies that adapt to funding rates, volatility, and ecosystem conditions in real time. When rates compress, capital rotates automatically — no manual action required.</p>
+      <h3>Directional Risk</h3>
       <p>Traditional yield products embed hidden market exposure. Harmonix centers on market-neutral structures that remove price beta from stablecoin products, letting users earn yield without depending on asset appreciation.</p>
-
       <div class="callout warn">
-        <span class="callout-icon">⚠️</span>
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f5c842" stroke-width="2"><path d="m10.29 3.86-8.57 14.86A2 2 0 0 0 3.43 22h17.14a2 2 0 0 0 1.71-3l-8.57-14.86a2 2 0 0 0-3.42.28z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
         <div class="callout-body"><strong>haHYPE and hakHYPE are not fully market-neutral.</strong> They carry directional exposure to HYPE price. Only the delta-neutral allocation within those vaults hedges the position — holders remain partially exposed to HYPE movement. See the haHYPE product page for details.</div>
       </div>
+      <h3>Disconnection from Execution</h3>
+      <p>Harmonix is built directly on Hyperliquid's execution environment, so funding markets, lending, and trading activity feed user yield without bridges, external oracles, or lag. Everything runs on the same stack — from consensus to application.</p>
 
-      <h3>4. Disconnection from Execution</h3>
-      <p>Harmonix is built directly on Hyperliquid's execution environment. Funding markets, lending, and trading activity feed user yield without bridges, external oracles, or lag.</p>
+      <h2>Built on Hyperliquid</h2>
+      <p>Harmonix runs on Hyperliquid's full stack. HyperBFT provides consensus and one-block finality. HyperCore is the primary source of funding income — perpetuals, spot, and staking. HyperEVM is where Harmonix vaults and ha-token contracts are deployed, alongside ecosystem protocols that supply additional yield and incentives.</p>
 
-      <h2>Participants</h2>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Role</th><th>What They Do</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Users</strong></td><td>Deposit and withdraw assets. Receive and return ERC-4626 share tokens (ha-tokens).</td></tr>
-          <tr><td><strong>Curators</strong></td><td>Decide strategy allocation and risk posture. Initiate allocation actions via ForDeFi.</td></tr>
-          <tr><td><strong>Contract Admins</strong></td><td>Govern upgrades and privileged actions across the vault stack. All actions require multisig approval.</td></tr>
-          <tr><td><strong>Protocols</strong></td><td>External venues where capital is allocated: Felix, Ondo, Hyna, HyperLend, Kinetiq, Pendle.</td></tr>
-        </tbody>
-      </table></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>What It Does</th><th>Harmonix Use</th></tr></thead>
+          <tbody>
+            <tr><td><strong>HyperBFT</strong></td><td>Consensus, one-block finality</td><td>Settlement and execution certainty</td></tr>
+            <tr><td><strong>HyperCore</strong></td><td>Perpetuals, spot, staking</td><td>Primary source of funding income</td></tr>
+            <tr><td><strong>HyperEVM</strong></td><td>EVM execution environment</td><td>Vault contracts, ha-tokens, ecosystem protocols</td></tr>
+            <tr><td><strong>HIP-3</strong></td><td>Native yield-bearing spot tokens</td><td>Felix feUSD, Ondo USDY, Hyna sUSDe as strategy inputs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>How Yield is Generated</h2>
+      <p>At the core of Harmonix is a basis-trade engine that pairs spot holdings with perpetual futures on HyperCore to neutralize price direction and earn funding payments. Funding income is layered with ecosystem yield from lending, staking, and looping across HyperEVM protocols — Felix, Hyperswap, Kinetiq, and others — allowing one position to generate yield from multiple independent sources simultaneously.</p>
+      <p>By centering yield on real funding markets and market-neutral execution, Harmonix aligns user returns with actual on-chain economics. The same capital supports multiple strategies, yield adapts to conditions automatically, and protocol growth flows directly to users.</p>
+
+      <div class="ps-grid" style="display:none">
+        <div class="ps-item" onclick="show('stablecoins',null)">
+          <div class="ps-item-banner ps-banner-stable">
+            <div class="ps-item-tags"><span class="ps-tag">haUSDC</span><span class="ps-tag">haUSDT</span><span class="ps-tag">haUSDH</span></div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Yield-Bearing Stablecoins</div>
+            <div class="ps-item-desc">USD-denominated yield-bearing vault shares that compound sustainable on-chain yield through market-neutral strategies. The share price grows over time as yield accrues into the exchange rate.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('tokens',null)">
+          <div class="ps-item-banner ps-banner-hype">
+            <div class="ps-item-tags"><span class="ps-tag">haHYPE</span><span class="ps-tag">hakHYPE</span></div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Yield-Bearing Tokens</div>
+            <div class="ps-item-desc">Yield-enhanced versions of HYPE and kHYPE that automatically compound funding income and ecosystem rewards into your position.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('cdharusd',null)">
+          <div class="ps-item-banner ps-banner-cd">
+            <div class="ps-item-tags"><span class="ps-tag">cdharUSD3</span></div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Convertible Deposits</div>
+            <div class="ps-item-desc">Fixed-yield deposits with optional conversion into HAR at a locked price. Stable yield floor with protocol upside optionality.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('har',null)">
+          <div class="ps-item-banner ps-banner-har">
+            <div class="ps-item-tags"><span class="ps-tag">HAR</span><span class="ps-tag">xHAR</span></div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">HAR Token</div>
+            <div class="ps-item-desc">The native Harmonix token that captures protocol growth, aligns long-term incentives, and governs ecosystem direction.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('vault-arch',null)">
+          <div class="ps-item-banner ps-banner-dev">
+            <div class="ps-item-tags"><span class="ps-tag">ERC-4626</span><span class="ps-tag">HIP-3</span></div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Developer Resources</div>
+            <div class="ps-item-desc">Architecture docs, smart contract references, and integration guides for builders working with Harmonix vaults on HyperEVM.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('points',null)">
+          <div class="ps-item-banner ps-banner-pts">
+            <div class="ps-item-tags"><span class="ps-tag">Points</span><span class="ps-tag">Rewards</span></div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Points &amp; Incentives</div>
+            <div class="ps-item-desc">How Harmonix Points accrue, partner protocol point programs, and the overall incentive layer structure.</div>
+          </div>
+        </div>
+      </div>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('welcome',null)">
-          <span class="page-nav-dir">← Previous</span>
-          <span>Welcome</span>
+          <span class="page-nav-dir">← Previous</span><span>Welcome</span>
         </a>
-        <a class="page-nav-link" onclick="show('architecture',null)" style="text-align:right">
-          <span class="page-nav-dir">Next →</span>
-          <span>Technical Architecture</span>
+        <a class="page-nav-link" onclick="show('product-suite',null)" style="text-align:right">
+          <span class="page-nav-dir">Next →</span><span>Product Suite</span>
         </a>
       </div>
     </section>
 
     <!-- ── ARCHITECTURE ── -->
     <section class="section" id="s-architecture">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Technical Architecture</span></div>
       <div class="page-hero">
         <span class="page-tag">Getting Started</span>
         <h1>Technical Architecture</h1>
@@ -619,8 +723,6 @@ td code { font-size: 12px; }
       </div>
 
       <h2>The Hyperliquid Stack</h2>
-      <p>Harmonix sits natively on the full Hyperliquid architecture — from consensus all the way up to application-layer yield tokens.</p>
-
       <div class="table-wrap"><table>
         <thead><tr><th>Layer</th><th>Component</th><th>Role in Harmonix</th></tr></thead>
         <tbody>
@@ -632,17 +734,110 @@ td code { font-size: 12px; }
         </tbody>
       </table></div>
 
-            <h2>Oracle Setup</h2>
+      <h2>HIP-3 Integration</h2>
+      <p>HIP-3 is Hyperliquid's native token standard for yield-bearing spot assets. Harmonix uses three HIP-3 markets as core strategy inputs:</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>HIP-3 Token</th><th>Protocol</th><th>Used In</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><code>feUSD</code></td><td>Felix</td><td>haUSDC, cdharUSD</td><td>CDP stablecoin. USDC deposited to mint feUSD providing base stablecoin yield on HyperCore.</td></tr>
+          <tr><td><code>USDY</code></td><td>Ondo Finance</td><td>haUSDC</td><td>Tokenized T-bill yield. Provides real-world yield on the stable portion of the vault.</td></tr>
+          <tr><td><code>sUSDe</code></td><td>Hyna (Ethena HIP-3)</td><td>haUSDC, haUSDH</td><td>Staked USDe. Provides stablecoin staking yield from the Ethena ecosystem on HyperCore.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout info">
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#50a0ff" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+        <div class="callout-body">HIP-3 tokens trade natively on HyperCore spot markets. Harmonix can hold, trade, and yield-accrue these assets without leaving the Hyperliquid execution environment — no bridges required.</div>
+      </div>
+
+      <h2>Oracle Setup</h2>
       <div class="table-wrap"><table>
         <thead><tr><th>Asset</th><th>Oracle</th><th>Notes</th></tr></thead>
         <tbody>
           <tr><td>haHYPE, hakHYPE</td><td>Pyth Network</td><td>Used for NAV Oracle and collateral pricing</td></tr>
-          <tr><td>haUSDC, haUSDT, haUSDH</td><td>Pyth or Chainlink (TBD)</td><td>Under evaluation for V2 launch</td></tr>
+          <tr><td>haUSDC</td><td>Pyth or Chainlink (TBD)</td><td>Under evaluation for V2 launch</td></tr>
         </tbody>
       </table></div>
 
-      <h2>Collateral & Listings</h2>
-      <p>haHYPE is being evaluated for listing as collateral on lending protocols within HyperEVM. The Pyth oracle integration is a prerequisite for this — it provides the real-time NAV price required for collateral risk systems.</p>
+      <div class="page-nav">
+        <a class="page-nav-link" onclick="show('overview',null)">
+          <span class="page-nav-dir">← Previous</span><span>Protocol Overview</span>
+        </a>
+        <a class="page-nav-link" onclick="show('stablecoins',null)" style="text-align:right">
+          <span class="page-nav-dir">Next →</span><span>Yield-Bearing Stablecoins</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── PRODUCT SUITE ── -->
+    <section class="section" id="s-product-suite">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Product Suite</span></div>
+      <div class="page-hero">
+        <span class="page-tag">Product Suite</span>
+        <h1>What Harmonix Offers</h1>
+        <p class="page-subtitle">A full suite of yield-bearing products built natively on Hyperliquid.</p>
+      </div>
+
+      <div class="ps-grid">
+        <div class="ps-item" onclick="show('stablecoins',null)">
+          <div class="ps-item-banner ps-banner-stable">
+            <div class="ps-item-tags">
+              <span class="ps-tag">haUSDC</span>
+              <span class="ps-tag">haUSDT</span>
+              <span class="ps-tag">haUSDH</span>
+            </div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Yield-Bearing Stablecoins</div>
+            <div class="ps-item-desc">USD-denominated yield-bearing vault shares that compound sustainable on-chain yield through market-neutral strategies. The share price grows over time as yield accrues into the exchange rate.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('tokens',null)">
+          <div class="ps-item-banner ps-banner-hype">
+            <div class="ps-item-tags">
+              <span class="ps-tag">haHYPE</span>
+              <span class="ps-tag">hakHYPE</span>
+            </div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Yield-Bearing Tokens</div>
+            <div class="ps-item-desc">Yield-enhanced versions of HYPE and kHYPE that automatically compound funding income and ecosystem rewards into your position.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('cdharusd',null)">
+          <div class="ps-item-banner ps-banner-cd">
+            <div class="ps-item-tags">
+              <span class="ps-tag">cdharUSD3</span>
+            </div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">Convertible Deposits</div>
+            <div class="ps-item-desc">Fixed-yield deposits with optional conversion into HAR at a locked price. Stable yield floor with protocol upside optionality.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('har',null)">
+          <div class="ps-item-banner ps-banner-har">
+            <div class="ps-item-tags">
+              <span class="ps-tag">HAR</span>
+              <span class="ps-tag">xHAR</span>
+            </div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">HAR Token</div>
+            <div class="ps-item-desc">The native Harmonix token that captures protocol growth, aligns long-term incentives, and governs ecosystem direction.</div>
+          </div>
+        </div>
+        <div class="ps-item" onclick="show('xhar',null)">
+          <div class="ps-item-banner ps-banner-har">
+            <div class="ps-item-tags">
+              <span class="ps-tag">xHAR</span>
+            </div>
+          </div>
+          <div class="ps-item-body">
+            <div class="ps-item-title">xHAR</div>
+            <div class="ps-item-desc">Staked HAR that earns protocol revenue and aligns long-term holders with Harmonix ecosystem growth.</div>
+          </div>
+        </div>
+      </div>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('overview',null)">
@@ -656,128 +851,63 @@ td code { font-size: 12px; }
 
     <!-- ── STABLECOINS ── -->
     <section class="section" id="s-stablecoins">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span onclick="show('overview',null)">Products</span><span class="bc-sep">›</span><span class="bc-current">Yield-Bearing Stablecoins</span></div>
       <div class="page-hero">
         <span class="page-tag">Products</span>
         <h1>Yield-Bearing Stablecoins</h1>
-        <p class="page-subtitle">haUSDC, haUSDT, and haUSDH are ERC-4626 receipt tokens that generate sustainable on-chain yield through market-neutral strategies on HyperCore, while maintaining a tight $1 peg.</p>
+        <p class="page-subtitle">haUSDC, haUSDH, and haUSDT are ERC-4626 receipt tokens that generate sustainable onchain yield by deploying capital across market-neutral strategies on HyperCore and ecosystem protocols on HyperEVM.</p>
       </div>
 
-      <div class="callout">
-        <span class="callout-icon">📅</span>
-        <div class="callout-body"><strong>Timeline:</strong> haUSDC V2 internal launch end of March 2025. Full mainnet mid-April 2025. haUSDT and haUSDH launching sequentially after.</div>
-      </div>
+      <p>The design is straightforward: deposit the underlying asset, receive ha-tokens that automatically accrue yield over time via the ERC-4626 exchange rate. No manual rebalancing, no claiming — your share simply becomes worth more of the underlying asset as yield compounds in.</p>
 
-      <p>Each ha-stablecoin exists to turn idle stablecoins into productive capital. Deposit the underlying asset, the protocol deploys it across delta-neutral strategies automatically, and your balance compounds in real time — no manual rebalancing, no active management required. Capital is deployed exclusively into market-neutral strategies, preserving the $1 peg through automated hedging.</p>
-
-      <div class="callout info">
-        <span class="callout-icon">🏗️</span>
-        <div class="callout-body"><strong>Built on Veda.</strong> Harmonix's yield-bearing stablecoin vaults (haUSDC, haUSDT, haUSDH) use the <a href="https://docs.veda.tech/" target="_blank">Veda framework</a> — a modular, audited vault infrastructure for institutional-grade DeFi. Veda provides the ERC-4626 base, role-based access control, and upgrade patterns across the Harmonix stablecoin stack.</div>
-      </div>
+      <h2>What ha-stablecoins are and how they fit</h2>
+      <p><strong>Turn idle stablecoins into productive capital.</strong> Rather than holding USDC, USDT, or USDH at zero yield, users mint the ha-equivalent and immediately begin earning from HyperCore funding markets and HyperEVM lending and liquidity protocols.</p>
+      <p><strong>Dollar-denominated, yield-accruing.</strong> Capital is deployed exclusively into market-neutral strategies — delta-neutral positions that minimize directional exposure. The vault targets stability of the underlying denomination; the share price grows over time as yield accrues into the exchange rate.</p>
+      <p><strong>Accrue ecosystem incentives.</strong> Beyond base yield, ha-stablecoin positions accrue Harmonix Points and partner protocol points automatically, compounding total returns across the Hyperliquid ecosystem.</p>
 
       <!-- TAB BAR -->
       <div class="stable-tabs">
         <button class="stable-tab active" onclick="showStableTab('tab-hausdc',this)">haUSDC</button>
         <button class="stable-tab" onclick="showStableTab('tab-hausdt',this)">haUSDT</button>
-        <button class="stable-tab" onclick="showStableTab('tab-hausdh')">haUSDH</button>
+        <button class="stable-tab" onclick="showStableTab('tab-hausdh',this)">haUSDH</button>
       </div>
 
-      <!-- haUSDC TAB -->
+      <!-- haUSDC -->
       <div class="stable-panel active" id="tab-hausdc">
         <h2>haUSDC</h2>
-        <p>haUSDC is an ERC-4626 receipt token. Deposit USDC or USDe, receive haUSDC. The protocol deploys that capital across delta-neutral strategies on HyperCore and ecosystem protocols on HyperEVM. Your haUSDC balance appreciates as yield accrues into the share price.</p>
-
-        <div class="table-wrap"><table>
-          <thead><tr><th>Property</th><th>Value</th></tr></thead>
-          <tbody>
-            <tr><td>Deposited Assets</td><td>USDC, USDe</td></tr>
-            <tr><td>Share Token</td><td><code>haUSDC</code> (ERC-4626)</td></tr>
-            <tr><td>Peg</td><td>$1.00</td></tr>
-            <tr><td>Target APY</td><td>5–12%</td></tr>
-            <tr><td>Minimum Deposit</td><td>1 USDC</td></tr>
-            <tr><td>Oracle</td><td>Pyth / Chainlink (TBD)</td></tr>
-            <tr><td>Point Rewards</td><td>Harmonix Points, Tradexyz, Hyna</td></tr>
-          </tbody>
-        </table></div>
-
+        <p>haUSDC is an ERC-4626 yield-bearing receipt token for USDC depositors. Deposit USDC, receive haUSDC shares. As the vault generates yield, each haUSDC becomes redeemable for more USDC over time — yield compounds into the exchange rate, not distributed as separate payments.</p>
+        <p style="color:var(--text2);font-size:13px;">Underlying asset: <strong style="color:var(--text);">USDC</strong> · Standard: <strong style="color:var(--text);">ERC-4626</strong> · Minimum deposit: <strong style="color:var(--text);">1 USDC</strong></p>
         <h3>Vault Allocation</h3>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Strategy</th><th>Description</th><th>Allocation</th></tr></thead>
-          <tbody>
-            <tr><td>Delta Neutral</td><td>Long spot / short perp on HyperCore (feUSD, USDY)</td><td>—%</td></tr>
-            <tr><td>Supply Spot</td><td>Lending & liquidity via Felix, Hyperswap, Kinetiq</td><td>—%</td></tr>
-            <tr><td>Idle</td><td>Buffer for smooth redemptions</td><td>—%</td></tr>
-          </tbody>
-        </table></div>
-
-        <h3>Strategies</h3>
-        <p><strong>Delta-Neutral on Spot Equities.</strong> Capital is paired as a spot long with a perpetual short on HyperCore, eliminating net price exposure and earning the funding payment. Spot assets include HIP-3 tokens from Felix (feUSD) and Ondo Finance (USDY).</p>
-        <p><strong>Crypto Delta-Neutral with Hyna / Ethena.</strong> A stablecoin delta-neutral position is constructed using Hyna's sUSDe. This earns staking yield from USDe while hedging residual exposure through a perpetual short on HyperCore.</p>
+        <p style="color:var(--text2);font-size:14px;line-height:1.7;">Capital is split across three strategies that shift dynamically based on market conditions. <strong style="color:var(--text);">Delta Neutral</strong> — the primary source, deploying capital long spot / short perp on HyperCore to earn funding rates with no directional exposure. <strong style="color:var(--text);">Supply Spot</strong> — lending and liquidity provision across HyperEVM protocols (Felix, Hyperswap, HyperLend) for additional variable yield. <strong style="color:var(--text);">Idle buffer</strong> — a small reserve maintained at all times to support smooth redemptions without unwinding active positions.</p>
       </div>
 
-      <!-- haUSDT TAB -->
+      <!-- haUSDT -->
       <div class="stable-panel" id="tab-hausdt">
         <h2>haUSDT</h2>
-        <p>haUSDT is an ERC-4626 yield-bearing receipt token for USDT depositors, following the same market-neutral strategy architecture as haUSDC with allocation tuned to USDT liquidity conditions on HyperCore and HyperEVM.</p>
-
-        <div class="table-wrap"><table>
-          <thead><tr><th>Property</th><th>Value</th></tr></thead>
-          <tbody>
-            <tr><td>Deposited Assets</td><td>USDT</td></tr>
-            <tr><td>Share Token</td><td><code>haUSDT</code> (ERC-4626)</td></tr>
-            <tr><td>Peg</td><td>$1.00</td></tr>
-            <tr><td>Minimum Deposit</td><td>1 USDT</td></tr>
-            <tr><td>Point Rewards</td><td>Harmonix Points</td></tr>
-          </tbody>
-        </table></div>
-
+        <p>haUSDT is an ERC-4626 yield-bearing receipt token for USDT depositors. Deposit USDT, receive haUSDT shares that grow in redemption value as the vault compounds yield into the exchange rate. Follows the same market-neutral strategy architecture as haUSDC, with allocation tuned to USDT liquidity conditions on HyperCore and HyperEVM.</p>
+        <p style="color:var(--text2);font-size:13px;">Underlying asset: <strong style="color:var(--text);">USDT</strong> · Standard: <strong style="color:var(--text);">ERC-4626</strong> · Minimum deposit: <strong style="color:var(--text);">1 USDT</strong></p>
         <h3>Vault Allocation</h3>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Strategy</th><th>Description</th><th>Allocation</th></tr></thead>
-          <tbody>
-            <tr><td>Delta Neutral</td><td>Long spot / short perp on HyperCore</td><td>—%</td></tr>
-            <tr><td>Supply Spot</td><td>Lending & liquidity across HyperEVM protocols</td><td>—%</td></tr>
-            <tr><td>Idle</td><td>Buffer for smooth redemptions</td><td>—%</td></tr>
-          </tbody>
-        </table></div>
+        <p style="color:var(--text2);font-size:14px;line-height:1.7;">Capital is split across three strategies that shift dynamically based on market conditions. <strong style="color:var(--text);">Delta Neutral</strong> — the primary source, deploying capital long spot / short perp on HyperCore to earn funding rates with no directional exposure. <strong style="color:var(--text);">Supply Spot</strong> — lending and liquidity provision across HyperEVM protocols for additional variable yield. <strong style="color:var(--text);">Idle buffer</strong> — a small reserve maintained at all times to support smooth redemptions without unwinding active positions.</p>
       </div>
 
-      <!-- haUSDH TAB -->
+      <!-- haUSDH -->
       <div class="stable-panel" id="tab-hausdh">
         <h2>haUSDH</h2>
-        <p>haUSDH is an ERC-4626 yield-bearing receipt token for USDH depositors — Hyperliquid's native stablecoin. As the ecosystem-native option, haUSDH benefits from deep HyperCore liquidity and is positioned to capture the highest native yield within the Harmonix stablecoin suite.</p>
-
-        <div class="table-wrap"><table>
-          <thead><tr><th>Property</th><th>Value</th></tr></thead>
-          <tbody>
-            <tr><td>Deposited Assets</td><td>USDH (Hyperliquid native stablecoin)</td></tr>
-            <tr><td>Share Token</td><td><code>haUSDH</code> (ERC-4626)</td></tr>
-            <tr><td>Peg</td><td>$1.00</td></tr>
-            <tr><td>Minimum Deposit</td><td>1 USDH</td></tr>
-            <tr><td>Point Rewards</td><td>Harmonix Points</td></tr>
-          </tbody>
-        </table></div>
-
+        <p>haUSDH is an ERC-4626 yield-bearing receipt token for USDH depositors — Hyperliquid's native stablecoin. As the ecosystem-native option, haUSDH benefits from deep HyperCore liquidity and is positioned to capture strong native yield. Deposit USDH, receive haUSDH shares that compound yield into the exchange rate over time.</p>
+        <p style="color:var(--text2);font-size:13px;">Underlying asset: <strong style="color:var(--text);">USDH</strong> · Standard: <strong style="color:var(--text);">ERC-4626</strong> · Minimum deposit: <strong style="color:var(--text);">1 USDH</strong></p>
         <h3>Vault Allocation</h3>
-        <div class="table-wrap"><table>
-          <thead><tr><th>Strategy</th><th>Description</th><th>Allocation</th></tr></thead>
-          <tbody>
-            <tr><td>Delta Neutral</td><td>Long spot / short perp on HyperCore (sUSDe via Hyna)</td><td>—%</td></tr>
-            <tr><td>Supply Spot</td><td>Lending across HyperEVM with USDH-native liquidity</td><td>—%</td></tr>
-            <tr><td>Idle</td><td>Buffer for smooth redemptions</td><td>—%</td></tr>
-          </tbody>
-        </table></div>
+        <p style="color:var(--text2);font-size:14px;line-height:1.7;">Capital is split across three strategies that shift dynamically based on market conditions. <strong style="color:var(--text);">Delta Neutral</strong> — the primary source, deploying capital long spot / short perp on HyperCore to earn funding rates with no directional exposure. <strong style="color:var(--text);">Supply Spot</strong> — lending and liquidity provision across HyperEVM protocols for additional variable yield. <strong style="color:var(--text);">Idle buffer</strong> — a small reserve maintained at all times to support smooth redemptions without unwinding active positions.</p>
       </div>
 
-      <!-- SHARED YIELD SOURCE INFO -->
+      <!-- Shared section -->
       <h2>Where Yield Comes From</h2>
-      <p>All three ha-stablecoins share the same underlying yield engine. Capital is routed across three primary sources:</p>
-      <p><strong>Funding income (Delta Neutral).</strong> Capital is paired long spot / short perpetuals on HyperCore to earn funding payments while eliminating price exposure. This is the primary, most consistent yield source.</p>
+      <p><strong>Funding income (Delta Neutral).</strong> Capital is paired long spot / short perpetuals on HyperCore to earn funding payments while minimizing price exposure. This is the primary, most consistent yield source.</p>
       <p><strong>Spot supply yield.</strong> A portion of capital is deployed into HyperEVM lending and liquidity protocols — Felix, Hyperswap, Kinetiq, and others — earning additional lending and LP yield on top of funding income.</p>
       <p><strong>Idle reserves.</strong> A buffer of undeployed capital is maintained at all times to support smooth redemptions without disrupting active strategy positions.</p>
 
       <div class="callout warn">
-        <span class="callout-icon">⚠️</span>
-        <div class="callout-body">ha-stablecoins are not guaranteed fixed-yield instruments. Yield fluctuates with funding rates, market conditions, and protocol activity. The $1 peg is maintained through market-neutral strategy design, not a hard redemption guarantee.</div>
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f5c842" stroke-width="2"><path d="m10.29 3.86-8.57 14.86A2 2 0 0 0 3.43 22h17.14a2 2 0 0 0 1.71-3l-8.57-14.86a2 2 0 0 0-3.42.28z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <div class="callout-body">ha-stablecoins are not guaranteed fixed-yield instruments. Yield fluctuates with funding rates, market conditions, and protocol activity. The share price grows over time as yield accrues — each haUSDC, haUSDT, or haUSDH will be worth more of the underlying asset at redemption than at deposit. They are not pegged to $1; they are yield-bearing vault shares denominated in their underlying stablecoin. For platform-wide risks, see <a onclick="show('risks',null)" href="#">Risks, Security &amp; Audits</a>.</div>
       </div>
 
       <div class="page-nav">
@@ -792,16 +922,28 @@ td code { font-size: 12px; }
 
     <!-- ── TOKENS ── -->
     <section class="section" id="s-tokens">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span onclick="show('overview',null)">Products</span><span class="bc-sep">›</span><span class="bc-current">Yield-Bearing Tokens</span></div>
       <div class="page-hero">
         <span class="page-tag">Products</span>
         <h1>Yield-Bearing Tokens</h1>
-        <p class="page-subtitle">haHYPE and hakHYPE are ERC-4626 yield-bearing tokens that put HYPE and kHYPE to work across HyperEVM. Yield accrues automatically into the share price — no claiming, no staking step required.</p>
+        <p class="page-subtitle">haHYPE and hakHYPE are ERC-4626 yield-bearing tokens that put HYPE and kHYPE to work across HyperEVM. Yield accrues automatically into the share price — no claiming, no staking step, no manual rebalancing required.</p>
       </div>
 
-      <div class="callout danger">
-        <span class="callout-icon">⚠️</span>
-        <div class="callout-body"><strong>haHYPE and hakHYPE are not delta-neutral products.</strong> The overall position carries directional HYPE exposure. While a delta-neutral sub-strategy within the vault reduces net beta, holders participate in HYPE price movements on the non-hedged portion. These are yield-enhancing tokens, not market-neutral instruments.</div>
+      <div class="callout warn">
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f5c842" stroke-width="2"><path d="m10.29 3.86-8.57 14.86A2 2 0 0 0 3.43 22h17.14a2 2 0 0 0 1.71-3l-8.57-14.86a2 2 0 0 0-3.42.28z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <div class="callout-body"><strong>haHYPE is for HYPE depositors. hakHYPE is for kHYPE depositors</strong> who want to compound yield on an already yield-bearing liquid staked asset.</div>
       </div>
+
+      <h2>Why Hold haHYPE or hakHYPE</h2>
+      <p><strong>Earn yield on HYPE without selling it.</strong> Capital is deployed across delta-neutral strategies, lending markets, and Pendle principal token positions, generating yield from multiple independent sources while you hold.</p>
+      <p><strong>Automatic compounding.</strong> Yield accrues directly into the share price via the ERC-4626 exchange rate. 1 haHYPE = 1.0198 HYPE today. No action required on your part.</p>
+      <p><strong>Points on top.</strong> Every position automatically accrues Harmonix Points and partner protocol points without any additional steps.</p>
+      <p><strong>Ecosystem-native.</strong> Built directly on HyperEVM with capital deployed exclusively across Hyperliquid-native protocols — no bridges, no external dependencies.</p>
+
+      <h2>How It Works</h2>
+      <p>When you deposit HYPE, Harmonix uses it as collateral to mint feUSD via Felix Protocol. The feUSD is swapped to USDC, which becomes the basis for the hedge. From there the capital splits: 50% is used to short HYPE on HyperCore, earning 10–15% APR from positive funding rates; the other 50% buys back HYPE and restakes it across HyperEVM protocols — DEXs, money markets, Pendle, and Kinetiq — generating ecosystem yield and points.</p>
+      <p>The two legs offset each other's directional exposure. Both sides generate yield simultaneously, with net delta close to zero.</p>
+      <p>For hakHYPE, the mechanic is simpler: kHYPE is already yield-bearing as Kinetiq's liquid staked HYPE. Harmonix layers additional yield on top by deploying into Kinetiq Earn, Pendle principal token markets, and cross-protocol lending strategies.</p>
 
       <!-- TAB BAR -->
       <div class="stable-tabs">
@@ -809,133 +951,161 @@ td code { font-size: 12px; }
         <button class="stable-tab" onclick="showTokenTab('tab-hakhype',this)">hakHYPE</button>
       </div>
 
-      <!-- haHYPE TAB -->
+      <!-- haHYPE -->
       <div class="stable-panel active" id="tab-hahype">
         <h2>haHYPE</h2>
-        <p>haHYPE is an ERC-4626 yield-bearing token for HYPE depositors. When you deposit HYPE, Harmonix uses it as collateral to mint feUSD via Felix Protocol. Capital splits: 50% shorts HYPE perps on HyperCore earning 10–15% APR from positive funding; 50% buys back HYPE and restakes it across HyperEVM — DEXes, money markets, Pendle, and Kinetiq — generating ecosystem yield and points simultaneously.</p>
-        <p>The two legs offset directional exposure. Both generate yield. Net delta is close to zero on the hedged portion — but the overall haHYPE product remains HYPE-exposed on the non-hedged allocation.</p>
-
         <div class="table-wrap"><table>
           <thead><tr><th>Property</th><th>Value</th></tr></thead>
           <tbody>
             <tr><td>Underlying</td><td>HYPE</td></tr>
-            <tr><td>Share Token</td><td><code>haHYPE</code> (ERC-4626)</td></tr>
-            <tr><td>Min Deposit</td><td>0.5 HYPE</td></tr>
-            <tr><td>Oracle</td><td>Pyth Network</td></tr>
-            <tr><td>Withdrawals In</td><td>WHYPE</td></tr>
+            <tr><td>Price Per Share</td><td>1 haHYPE = 1.0198 HYPE</td></tr>
+            <tr><td>Minimum Deposit</td><td>0.5 HYPE</td></tr>
+            <tr><td>Standard</td><td>ERC-4626</td></tr>
+            <tr><td>Withdrawals</td><td>WHYPE</td></tr>
+            <tr><td>Points Accrued</td><td>Harmonix, HyperLend, Felix, HypurrFi, kPoints, Ventuals</td></tr>
           </tbody>
         </table></div>
-
-        <p>The primary source is funding rate income from shorting HYPE perps on HyperCore — historically 10–15% APR when rates are positive. Secondary sources include lending yield from HyperLend, HypurrFi, and Felix, fixed yield from Pendle PT positions, and liquid staking yield via Kinetiq. Net yield is realized after borrow costs, fees, and the idle buffer. It compounds directly into the share price.</p>
-
-        <h3>Withdrawals</h3>
-        <p>Withdrawals are currently settled in WHYPE. A 5% buffer pool is maintained for near-instant withdrawals. Requests within the buffer are typically processed within one day. Large withdrawals exceeding 5% of vault TVL may take up to three days. Native HYPE withdrawal support is planned for a future update.</p>
+        <h3>Capital Allocation</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Strategy</th><th>Protocol</th></tr></thead>
+          <tbody>
+            <tr><td>Delta Neutral on HYPE (2x leverage)</td><td>Hyperliquid</td></tr>
+            <tr><td>PT-vkHYPE</td><td>Pendle</td></tr>
+            <tr><td>Supply HYPE</td><td>HyperLend</td></tr>
+            <tr><td>Supply wstHYPE</td><td>HyperLend, HypurrFi, Felix</td></tr>
+            <tr><td>Kinetiq Earn</td><td>Kinetiq</td></tr>
+            <tr><td>Idle (buffer)</td><td>—</td></tr>
+          </tbody>
+        </table></div>
       </div>
 
-      <!-- hakHYPE TAB -->
+      <!-- hakHYPE -->
       <div class="stable-panel" id="tab-hakhype">
         <h2>hakHYPE</h2>
-        <p>hakHYPE is an ERC-4626 yield-bearing token for kHYPE depositors. kHYPE is already yield-bearing as Kinetiq's liquid staked HYPE. Harmonix layers additional yield on top by deploying into Kinetiq Earn, Pendle principal token markets, and cross-protocol lending strategies.</p>
-
         <div class="table-wrap"><table>
           <thead><tr><th>Property</th><th>Value</th></tr></thead>
           <tbody>
             <tr><td>Underlying</td><td>kHYPE (Kinetiq liquid staked HYPE)</td></tr>
-            <tr><td>Share Token</td><td><code>hakHYPE</code> (ERC-4626)</td></tr>
-            <tr><td>Min Deposit</td><td>0.5 kHYPE</td></tr>
-            <tr><td>Oracle</td><td>Pyth Network</td></tr>
-            <tr><td>Withdrawals In</td><td>kHYPE</td></tr>
+            <tr><td>Price Per Share</td><td>1 hakHYPE = 1.0097 kHYPE</td></tr>
+            <tr><td>Minimum Deposit</td><td>0.5 kHYPE</td></tr>
+            <tr><td>Standard</td><td>ERC-4626</td></tr>
+            <tr><td>Withdrawals</td><td>kHYPE</td></tr>
+            <tr><td>Points Accrued</td><td>Harmonix, HyperLend, HypurrFi</td></tr>
           </tbody>
         </table></div>
-
-        <p>The base layer is Kinetiq's native staking yield on kHYPE. Pendle PT positions add fixed yield on top, and the HyperLend and Etherfi lending strategies generate additional variable income. All yield compounds directly into the share price.</p>
+        <h3>Capital Allocation</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Strategy</th><th>Protocol</th></tr></thead>
+          <tbody>
+            <tr><td>Kinetiq Earn</td><td>Kinetiq</td></tr>
+            <tr><td>PT-vkHYPE, PT-kHYPE</td><td>Pendle</td></tr>
+            <tr><td>Supply kHYPE, Borrow &amp; Supply uETH</td><td>HyperLend, Etherfi</td></tr>
+            <tr><td>Idle (buffer)</td><td>—</td></tr>
+          </tbody>
+        </table></div>
       </div>
 
-      <!-- SHARED: FEES -->
+      <h2>Where Yield Comes From</h2>
+      <p>For haHYPE, the primary source is funding rate income from shorting HYPE perps on HyperCore — historically 10–15% APR when rates are positive. Secondary sources include lending yield from HyperLend, HypurrFi, and Felix, fixed yield from Pendle PT positions, and liquid staking yield via Kinetiq.</p>
+      <p>For hakHYPE, the base layer is Kinetiq's native staking yield on kHYPE. Pendle PT positions add fixed yield on top, and the HyperLend and Etherfi lending strategies generate additional variable income.</p>
+      <p>Net yield is realized after borrow costs, fees, and the idle buffer. It compounds directly into the share price and is reflected in real time in the app.</p>
+
       <h2>Fees</h2>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Fee Type</th><th>Rate</th><th>When Charged</th></tr></thead>
-        <tbody>
-          <tr><td>Management Fee</td><td>1% / year (pro-rated)</td><td>Continuously while in vault</td></tr>
-          <tr><td>Performance Fee</td><td>10% of net profit</td><td>At withdrawal only</td></tr>
-        </tbody>
-      </table></div>
-      <p>No fees are deducted while capital is actively deployed. Users are encouraged to remain in the vault for at least 7 days to ensure yield offsets applicable fees.</p>
+      <p>A management fee of 1% per year is charged pro-rated based on time in the vault. A performance fee of 10% on net profit is charged at withdrawal only. No fees are deducted while capital is actively deployed. Users are encouraged to remain in the vault for at least 7 days to ensure yield offsets applicable fees.</p>
+
+      <h2>Withdrawals</h2>
+      <p>Withdrawals are currently settled in WHYPE. A 5% buffer pool is maintained at all times to support near-instant withdrawals. Requests within the buffer are typically processed within one day. Large withdrawals exceeding 5% of vault TVL may take up to three days to process. Native HYPE withdrawal support is planned for a future update.</p>
+
+      <h2>Risks</h2>
+      <p><strong>Directional risk.</strong> haHYPE and hakHYPE carry directional exposure to HYPE. While the delta-neutral allocation reduces net market beta, these are not fully market-neutral products — holders participate in HYPE price movements on the non-hedged portion.</p>
+      <p><strong>Funding rate risk.</strong> If HYPE perpetual funding rates turn negative, the short leg generates a cost rather than income. The strategy monitors rates in real time and adjusts position sizing or exits the leg if conditions deteriorate.</p>
+      <p><strong>Pendle PT maturity.</strong> Fixed-yield positions on Pendle have defined maturity dates. Positions are sized conservatively and rolled ahead of maturity.</p>
+      <p><strong>Venue risk.</strong> Capital is deployed across multiple HyperEVM protocols. Each carries its own smart contract and liquidity risk. Diversification reduces but does not eliminate this exposure.</p>
+
+      <h2>FAQs</h2>
+      <h3>Does yield pay out automatically?</h3>
+      <p>Yes. Yield accrues continuously into the share price. There is no claiming step or separate staking action required — holding haHYPE or hakHYPE is sufficient.</p>
+      <h3>Why are withdrawals in WHYPE and not HYPE?</h3>
+      <p>WHYPE is the HyperEVM-native wrapped form of HYPE. Native HYPE withdrawal support is planned for a future update.</p>
+      <h3>What happens if funding rates go negative?</h3>
+      <p>The strategy monitors funding rates in real time. If rates turn negative, position sizing is adjusted and the delta-neutral leg may be reduced or exited to protect returns.</p>
+      <h3>Is there a minimum holding period?</h3>
+      <p>No hard lockup. However, staying in the vault for at least 7 days ensures yield earned offsets the applicable fees.</p>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('stablecoins',null)">
           <span class="page-nav-dir">← Previous</span><span>Yield-Bearing Stablecoins</span>
         </a>
         <a class="page-nav-link" onclick="show('cdharusd',null)" style="text-align:right">
-          <span class="page-nav-dir">Next →</span><span>cdharUSD</span>
+          <span class="page-nav-dir">Next →</span><span>Convertible Deposits</span>
         </a>
       </div>
     </section>
 
     <!-- ── CDHARUSD ── -->
     <section class="section" id="s-cdharusd">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span onclick="show('overview',null)">Products</span><span class="bc-sep">›</span><span class="bc-current">Convertible Deposits</span></div>
       <div class="page-hero">
         <span class="page-tag">Products</span>
-        <h1>cdharUSD — Convertible Deposits</h1>
-        <p class="page-subtitle">Fixed-term yield with an optional conversion right into HAR at a price locked at deposit.</p>
+        <h1>Convertible Deposits</h1>
+        <p class="page-subtitle">Fixed-term yield with an optional conversion right into HAR at a price locked at deposit. Stable yield floor with protocol upside optionality.</p>
       </div>
+
+      <p>cdharUSD3 is Harmonix's convertible deposit token. Deposit USDC or USDH, earn yield through delta-neutral strategies, and hold a personal, time-locked right to convert into HAR at the price set at deposit. By default you stay in stablecoins. HAR upside is available if you want it, never forced.</p>
+      <p>The design sits between a lending vault and a token position. A lending vault gives you predictable yield but no exposure to HAR appreciation. Buying HAR outright gives you price exposure but no downside protection. cdharUSD3 gives you both: stable yield while you wait, and the right to rotate into HAR at your locked price if the token moves in your favour.</p>
 
       <div class="callout info">
-        <span class="callout-icon">ℹ️</span>
-        <div class="callout-body">
-          <strong>Naming convention:</strong> The number suffix indicates the lock term.
-          <code>cdharUSD1</code> = 1-month lock · <code>cdharUSD2</code> = 2-month lock · <code>cdharUSD3</code> = 3-month lock.
-          All three share the same mechanics — only the term length differs.
-        </div>
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#50a0ff" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+        <div class="callout-body">Think of it as a yield-bearing stable position with a built-in HAR entry option attached — one that only activates if you choose to use it.<br><br><strong>Naming:</strong> The number suffix indicates the lock term. <code>cdharUSD1</code> = 1-month · <code>cdharUSD2</code> = 2-month · <code>cdharUSD3</code> = 3-month. All three share the same mechanics.</div>
       </div>
 
-      <div class="table-wrap"><table>
-        <thead><tr><th></th><th>cdharUSD1</th><th>cdharUSD2</th><th>cdharUSD3</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Lock Term</strong></td><td>1 month</td><td>2 months</td><td>3 months</td></tr>
-          <tr><td><strong>Deposited Assets</strong></td><td colspan="3" style="text-align:center">USDC, USDH</td></tr>
-          <tr><td><strong>Conversion Right</strong></td><td colspan="3" style="text-align:center">HAR at price locked at deposit</td></tr>
-          <tr><td><strong>Yield Source</strong></td><td colspan="3" style="text-align:center">Same delta-neutral engine as haUSDC</td></tr>
-          <tr><td><strong>Early Exit</strong></td><td colspan="3" style="text-align:center">Available (fee + conversion right forfeited)</td></tr>
-        </tbody>
-      </table></div>
+      <h2>Why Choose cdharUSD3</h2>
+      <p><strong>Yield without giving up optionality.</strong> Your deposit earns the same delta-neutral yield as haUSDC throughout the term. You are not sacrificing return to hold the conversion right.</p>
+      <p><strong>A personal HAR entry price, locked at deposit.</strong> The moment you deposit, your conversion price is fixed. Whatever happens to HAR's market price between deposit and maturity, your entry price does not change.</p>
+      <p><strong>You control the outcome.</strong> At maturity you see HAR's market price versus your locked price and decide. Convert if it makes sense. Redeem stablecoins plus yield if it doesn't. Nothing happens automatically.</p>
+      <p><strong>Early exit is always available.</strong> If you need liquidity before the term ends, you can exit with a small fee. Your HAR conversion right is forfeited, but your principal and most of your yield return immediately.</p>
+      <p><strong>Passive incentive accrual.</strong> cdharUSD3 positions accumulate HIP-3 points and HyperEVM incentives throughout the term with no additional steps.</p>
+
+      <h2>How the Conversion Price Is Set</h2>
+      <p>At deposit, your personal entry price is locked via a continuous tick-based auction. Each tick has a fixed token capacity — when it fills, the next one opens 0.75% higher. Large deposits consume multiple ticks and receive a weighted average price across all of them, meaning a $50,000 deposit will almost always receive a worse average price than five $10,000 deposits placed over time.</p>
+      <p>When there are no bids, the price drifts back down toward a minimum floor set daily at a fixed percentage above HAR's market price. Depositing during quiet periods and splitting larger amounts into smaller deposits over time are the two most direct ways to secure a better average entry price.</p>
 
       <h2>How It Works</h2>
-      <p>cdharUSD is a yield-bearing stable position with a built-in HAR entry option attached. You earn haUSDC-equivalent yield throughout the term. At maturity, you choose: convert into HAR at your locked price if it's favorable, or redeem stablecoins plus yield. Nothing happens automatically — the decision is always yours.</p>
+      <h3>Step 1 — Choose your term</h3>
+      <p>Deposit USDC or USDH into a 1, 2, or 3-month vault. You receive cdharUSD3, a yield-bearing receipt token representing your stablecoin principal, your accrued yield, and your time-locked conversion right.</p>
+      <p class="callout-inline"><em>Example: deposit 10,000 USDC into the 3-month vault at a conversion price of 0.025. You hold cdharUSD3 representing 10,000 USDC plus the right to convert into 400,000 HAR at maturity.</em></p>
+      <h3>Step 2 — Earn yield while you wait</h3>
+      <p>While holding cdharUSD3, capital is deployed into Harmonix's delta-neutral strategy engine — the same engine powering haUSDC. The vault splits between spot long positions and perpetual shorts on HyperCore, capturing funding rate income with zero directional exposure. When funding rates turn negative, capital rotates automatically into lending and staking. Yield compounds quietly into your position throughout the term.</p>
+      <h3>Step 3 — Decision at maturity</h3>
+      <p>At maturity you see your stablecoin claim plus yield, HAR's current market price, your locked conversion price, and any accumulated incentives. Three paths are available:</p>
+      <p><strong>Convert to HAR.</strong> If HAR is trading above your locked conversion price, burn cdharUSD3 and receive HAR at the locked rate. Conversions can be partial. When you convert, your stablecoins move permanently into the Harmonix treasury to acquire HYPE.</p>
+      <p><strong>Redeem stablecoins and yield.</strong> Receive USDC or USDH plus accrued yield. No HAR exposure. Identical to a haUSDC position that ran to term.</p>
+      <p><strong>Exit early.</strong> Available at any point during the term. Most stablecoins are returned, a small early-exit fee applies, and the HAR conversion right is forfeited.</p>
 
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h4>Choose your term and deposit</h4>
-            <p>Deposit USDC or USDH into the 1-, 2-, or 3-month vault. Receive cdharUSD (1/2/3) as your receipt token. Your HAR conversion price is locked the moment you deposit via the continuous tick auction.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h4>Earn yield throughout the term</h4>
-            <p>Capital is deployed into the same delta-neutral engine powering haUSDC. Yield compounds into your position continuously. No action required.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <h4>Decide at maturity</h4>
-            <p><strong>Convert to HAR</strong> if the market price exceeds your locked conversion price. <strong>Redeem stablecoins + yield</strong> for zero HAR exposure. Or <strong>exit early</strong> at any time with a small fee (conversion right forfeited).</p>
-          </div>
-        </div>
-      </div>
+      <h2>Fees</h2>
+      <p>An early-exit fee applies to users who redeem before maturity. The fee is shown in the app at the time of exit. No fee applies to full-term redemptions or HAR conversions.</p>
 
-      <h2>Conversion Price Mechanics</h2>
-      <p>At deposit, your HAR entry price is locked via a continuous tick-based auction. Each tick has a fixed token capacity — when it fills, the next tick opens 0.75% higher. Large deposits consume multiple ticks and receive a weighted average price. Depositing during quiet periods and splitting large amounts over time are the most direct ways to secure a better average entry price.</p>
+      <h2>Risks</h2>
+      <p><strong>Conversion price risk.</strong> If HAR trades below your locked conversion price at maturity, the conversion right has no intrinsic value. Your stablecoin principal and yield are unaffected.</p>
+      <p><strong>Strategy risk.</strong> Yield is variable and depends on funding rates, lending utilization, and market conditions.</p>
+      <p><strong>Liquidity and exit timing.</strong> cdharUSD3 is time-locked. Early exit is always available but carries a fee and forfeits the conversion right.</p>
+      <p><strong>Tick pricing risk.</strong> Large deposits consume multiple ticks and receive a weighted average conversion price. Splitting deposits and timing entries during quiet periods reduces this effect.</p>
 
-      <h2>What Happens When You Convert</h2>
-      <p>When you convert at maturity, your stablecoins move into the Harmonix treasury. The treasury uses those funds to acquire HYPE and deploy into Harmonix strategies — growing the long-term HYPE reserve. The yield from that HYPE reserve flows into the xHAR vault for staked HAR holders.</p>
+      <h2>FAQs</h2>
+      <h3>Do I have to convert to HAR at maturity?</h3>
+      <p>No. Conversion is entirely optional. If you redeem, you receive stablecoins plus yield with zero HAR exposure.</p>
+      <h3>What if HAR is below my conversion price at maturity?</h3>
+      <p>Your conversion right has no value. You redeem stablecoins plus yield exactly as if you had held haUSDC for the term.</p>
+      <h3>Can I convert only part of my position?</h3>
+      <p>Yes. Conversions can be partial — you do not have to convert the full cdharUSD3 position at once.</p>
+      <h3>How do I get a better conversion price?</h3>
+      <p>Deposit during quiet periods when there are no competing bids, and split larger amounts into smaller deposits placed over time rather than one large entry.</p>
+      <h3>Can I access liquidity before the term ends?</h3>
+      <p>Yes, via early exit with a small fee that forfeits the conversion right.</p>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('tokens',null)">
-          <span class="page-nav-dir">← Previous</span><span>haHYPE & hakHYPE</span>
+          <span class="page-nav-dir">← Previous</span><span>Yield-Bearing Tokens</span>
         </a>
         <a class="page-nav-link" onclick="show('har',null)" style="text-align:right">
           <span class="page-nav-dir">Next →</span><span>HAR Token</span>
@@ -945,55 +1115,39 @@ td code { font-size: 12px; }
 
     <!-- ── HAR ── -->
     <section class="section" id="s-har">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">HAR</span></div>
       <div class="page-hero">
         <span class="page-tag">Tokenomics</span>
         <h1>HAR</h1>
         <p class="page-subtitle">The native token of the Harmonix Protocol. Total supply: 1,000,000,000 HAR. No inflation.</p>
       </div>
 
-      <!-- HAR banner image -->
-      <div style="border-radius:12px;overflow:hidden;margin-bottom:32px;">
-        
-      </div>
-
-      <h2>Product Overview</h2>
-      <p>HAR is the native token of the Harmonix Protocol, serving as the core mechanism for governance, economic growth, and user ownership. It is designed to drive governance decisions, treasury direction, and utility-driven participation across the ecosystem.</p>
-      <p>The total supply is fixed at 1,000,000,000 HAR. There is no inflation through additional minting.</p>
-      <p>This page explains what HAR is, how it is distributed, how xHAR works, and how value flows to HAR across the ecosystem. For details on how stablecoin conversions interact with HAR, see Convertible Deposits. For platform-wide risks, see Risks, Security &amp; Audits.</p>
+      <p>HAR is the native token of the Harmonix Protocol, serving as the core mechanism for governance, economic growth, and user ownership. It is designed to drive governance decisions, treasury direction, and utility-driven participation across the ecosystem. The total supply is fixed at 1,000,000,000 HAR. There is no inflation through additional minting.</p>
 
       <h2>What HAR Is and How It Fits</h2>
       <p>HAR exists to connect protocol activity to long-term value and give holders a direct voice in how Harmonix evolves. HAR holders propose and vote on protocol parameters, treasury allocations, emissions schedules, and the direction of Harmonix's HYPE treasury.</p>
       <p>Across the product suite, HAR is the destination for users who want to move beyond yield and into ownership. Stable depositors in cdharUSD3 hold a locked right to convert into HAR at maturity. xHAR stakers earn protocol revenue from that conversion flow. HAR ties the two sides together — governance at the top, yield alignment underneath.</p>
 
-      <h2>xHAR — Staked HAR</h2>
-      <p>Stake HAR to receive xHAR. xHAR accumulates yield automatically from three sources: early-exit fees from cdharUSD3 holders who leave before maturity, yield generated on HYPE purchased with converted stablecoins, and additional protocol revenue.</p>
-      <p>You do not manage positions or track individual vaults. You hold xHAR, and when the system generates revenue the token appreciates. xHAR holders are the equity layer of Harmonix — when the treasury's HYPE stack grows, so does their yield.</p>
-
-      <h2>The Flywheel</h2>
-      <p>Stable users deposit into cdharUSD3 and earn yield. When they convert into HAR, their stablecoins move into the Harmonix treasury and are used to acquire HYPE. That HYPE generates real yield. That yield flows into the xHAR vault. A stronger xHAR makes HAR more attractive. A more attractive HAR draws more stable depositors. The loop restarts.</p>
-
       <div class="callout">
-        <span class="callout-icon">🔄</span>
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c8f07a" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></span>
         <div class="callout-body">
           <strong>Stablecoin user:</strong> "I park stables, earn yield, and if Harmonix does well I can rotate into HAR at my locked price."<br><br>
           <strong>HAR staker:</strong> "I lock HAR and share the upside whenever stable holders convert and the treasury's HYPE stack grows."
         </div>
       </div>
 
+      <h2>The Flywheel</h2>
+      <p>Stable users deposit into cdharUSD3 and earn yield. When they convert into HAR, their stablecoins move into the Harmonix treasury and are used to acquire HYPE. That HYPE generates real yield. That yield flows into the xHAR vault. A stronger xHAR makes HAR more attractive. A more attractive HAR draws more stable depositors. The loop restarts.</p>
+
       <h2>Supply &amp; Allocation</h2>
       <p>HAR's supply is distributed across Community, Investors, Core Contributors, and the Foundation, with a structured vesting and unlock schedule to ensure long-term alignment and sustainable protocol growth.</p>
-
-      <!-- Tokenomics pie chart image -->
-      <div style="border-radius:12px;overflow:hidden;margin:24px 0;">
-        
-      </div>
 
       <div class="table-wrap"><table>
         <thead><tr><th>Category</th><th>%</th><th>Details</th></tr></thead>
         <tbody>
           <tr>
             <td><strong>Community — Airdrop (TGE)</strong></td><td>25%</td>
-            <td>Distributed at TGE: 5% staking rewards across Harmonix Staking Vaults and Downside Protection Vault; 19% Harmonix point holders &amp; partner communities; 1% Hypurr NFT holders. 6.43% unclaimed (reserved for Downside Protection Vault and future protection rewards).</td>
+            <td>5% staking rewards across Harmonix Staking Vaults; 19% Harmonix point holders &amp; partner communities; 1% Hypurr NFT holders. 6.43% unclaimed — reserved for the Downside Protection Vault and future protection rewards.</td>
           </tr>
           <tr>
             <td><strong>Community — Future Airdrop</strong></td><td>25%</td>
@@ -1005,7 +1159,7 @@ td code { font-size: 12px; }
           </tr>
           <tr>
             <td><strong>Private &amp; Public Sale</strong></td><td>18%</td>
-            <td>Private sale (15%): Pre-Seed with 2% unlocking at TGE; Seed with 5% unlocking at TGE. Public sale (3%): fully unlocked at TGE, directed to Sonar and Solanium raises.</td>
+            <td>Private sale (15%): Pre-Seed with 2% unlocking at TGE; Seed with 5% at TGE. Public sale (3%): fully unlocked at TGE, directed to Sonar and Solanium raises.</td>
           </tr>
           <tr>
             <td><strong>Foundation</strong></td><td>10%</td>
@@ -1019,37 +1173,24 @@ td code { font-size: 12px; }
       </table></div>
 
       <h2>Vesting &amp; Unlocks</h2>
-      <p>The distribution of HAR reflects long-term alignment between contributors, early supporters, and the broader community. Vesting schedules are designed to prevent short-term liquidity shocks and provide predictable token availability over time. Unlocks are distributed quarterly over 48 months, beginning at TGE, with different categories tailored to the role they play in the ecosystem.</p>
-
-      <!-- Token unlocks chart image -->
-      <div style="border-radius:12px;overflow:hidden;margin:24px 0;">
-        
-      </div>
+      <p>The HAR token follows a structured, multi-year unlock schedule designed to ensure long-term alignment, sustainable growth, and a healthy market environment. Unlocks are distributed quarterly over 48 months, beginning at TGE, with different categories tailored to the role they play in the ecosystem. Vesting schedules are designed to prevent short-term liquidity shocks and provide predictable token availability over time.</p>
 
       <h2>What HAR Is Not</h2>
-      <p>HAR is not a promise of fixed yield or guaranteed returns. Market prices vary, protocol revenue fluctuates, and governance outcomes depend on participation. Nothing on this page is investment advice. For platform-wide risks see Risks, Security &amp; Audits.</p>
+      <p>HAR is not a promise of fixed yield or guaranteed returns. Market prices vary, protocol revenue fluctuates, and governance outcomes depend on participation. Nothing on this page is investment advice. For platform-wide risks see <a onclick="show('risks',null)" href="#">Risks, Security &amp; Audits</a>.</p>
 
       <h2>FAQs</h2>
-      <div class="callout" style="margin-bottom:12px;">
-        <span class="callout-icon">❓</span>
-        <div class="callout-body"><strong>How do I get HAR?</strong><br>Through the public sale, by converting a cdharUSD3 position at maturity, or via community airdrop allocations. HAR will also be tradeable on open markets post-TGE.</div>
-      </div>
-      <div class="callout" style="margin-bottom:12px;">
-        <span class="callout-icon">❓</span>
-        <div class="callout-body"><strong>What is the difference between HAR and xHAR?</strong><br>HAR is the base governance and ownership token. xHAR is staked HAR — the yield-accruing position that receives protocol revenue from cdharUSD3 conversions and HYPE treasury yield.</div>
-      </div>
-      <div class="callout" style="margin-bottom:12px;">
-        <span class="callout-icon">❓</span>
-        <div class="callout-body"><strong>Can I unstake xHAR?</strong><br>Unstaking converts xHAR back to HAR at the prevailing rate. Timing and any cooldown parameters are shown in the app.</div>
-      </div>
-      <div class="callout" style="margin-bottom:24px;">
-        <span class="callout-icon">❓</span>
-        <div class="callout-body"><strong>How does governance work?</strong><br>HAR holders propose and vote on protocol parameters, treasury allocations, and emissions schedules. Details on governance mechanics will be published separately.</div>
-      </div>
+      <h3>How do I get HAR?</h3>
+      <p>Through the public sale, by converting a cdharUSD3 position at maturity, or via community airdrop allocations. HAR will also be tradeable on open markets post-TGE.</p>
+      <h3>What is the difference between HAR and xHAR?</h3>
+      <p>HAR is the base governance and ownership token. xHAR is staked HAR — the yield-accruing position that receives protocol revenue from cdharUSD3 conversions and HYPE treasury yield.</p>
+      <h3>Can I unstake xHAR?</h3>
+      <p>Unstaking converts xHAR back to HAR at the prevailing rate. Timing and any cooldown parameters are shown in the app.</p>
+      <h3>How does governance work?</h3>
+      <p>HAR holders propose and vote on protocol parameters, treasury allocations, and emissions schedules. Details on governance mechanics will be published separately.</p>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('cdharusd',null)">
-          <span class="page-nav-dir">← Previous</span><span>cdharUSD</span>
+          <span class="page-nav-dir">← Previous</span><span>Convertible Deposits</span>
         </a>
         <a class="page-nav-link" onclick="show('xhar',null)" style="text-align:right">
           <span class="page-nav-dir">Next →</span><span>xHAR</span>
@@ -1059,30 +1200,18 @@ td code { font-size: 12px; }
 
     <!-- ── XHAR ── -->
     <section class="section" id="s-xhar">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">xHAR</span></div>
       <div class="page-hero">
         <span class="page-tag">Tokenomics</span>
         <h1>xHAR — Staked HAR</h1>
-        <p class="page-subtitle">Stake HAR to receive xHAR. Protocol revenue accrues automatically into the xHAR exchange rate.</p>
+        <p class="page-subtitle">The yield-accruing position that receives protocol revenue from cdharUSD3 conversions and HYPE treasury yield.</p>
       </div>
-
-      <h2>Revenue Sources for xHAR</h2>
-      <ul>
-        <li><strong>Early-exit fees</strong> from cdharUSD holders who leave before maturity</li>
-        <li><strong>HYPE treasury yield</strong> — yield generated on HYPE purchased with converted stablecoins from cdharUSD maturities</li>
-        <li><strong>Additional protocol revenue</strong> as new products launch</li>
-      </ul>
-
+      <p>Stake HAR to receive xHAR. xHAR accumulates yield automatically from three sources: early-exit fees from cdharUSD3 holders who leave before maturity, yield generated on HYPE purchased with converted stablecoins, and additional protocol revenue.</p>
+      <p>You do not manage positions or track individual vaults. You hold xHAR, and when the system generates revenue the token appreciates. xHAR holders are the equity layer of Harmonix — when the treasury's HYPE stack grows, so does their yield.</p>
+      <h2>Revenue Sources</h2>
+      <p>xHAR accumulates yield from three sources: early-exit fees from cdharUSD3 holders who leave before maturity, yield generated on HYPE purchased with converted stablecoins, and additional protocol revenue as new products launch.</p>
       <h2>The Flywheel</h2>
-      <p>Stable users deposit into cdharUSD and earn yield. When they convert into HAR at maturity, their stablecoins move into the Harmonix treasury and are used to acquire HYPE. That HYPE generates real yield. That yield flows into the xHAR vault. A stronger xHAR makes HAR more attractive. A more attractive HAR draws more stable depositors. The loop restarts.</p>
-
-      <div class="callout">
-        <span class="callout-icon">🔄</span>
-        <div class="callout-body">
-          <strong>Stable user:</strong> "I park stables, earn yield, and if Harmonix does well I rotate into HAR at my locked price."<br>
-          <strong>HAR staker:</strong> "I lock HAR into xHAR and share the upside whenever stable holders convert and the HYPE treasury grows."
-        </div>
-      </div>
-
+      <p>Stable users deposit into cdharUSD3 and earn yield. When they convert into HAR at maturity, their stablecoins move into the Harmonix treasury and are used to acquire HYPE. That HYPE generates real yield. That yield flows into the xHAR vault. A stronger xHAR makes HAR more attractive. A more attractive HAR draws more stable depositors. The loop restarts.</p>
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('har',null)">
           <span class="page-nav-dir">← Previous</span><span>HAR Token</span>
@@ -1093,8 +1222,9 @@ td code { font-size: 12px; }
       </div>
     </section>
 
-    <!-- ── VAULT ARCHITECTURE ── -->
+    <!-- ── VAULT ARCH ── -->
     <section class="section" id="s-vault-arch">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Vault Architecture</span></div>
       <div class="page-hero">
         <span class="page-tag">For Developers</span>
         <h1>Vault Architecture</h1>
@@ -1104,31 +1234,46 @@ td code { font-size: 12px; }
       <h2>V1 — Current State</h2>
       <p>The V1 vault established the core flow: users deposit assets, an Accountant module calculates price-per-share, a NAV Oracle feeds real-time position data, a Manager executes allocations, and ForDeFi handles operational custody signing.</p>
 
-      <div class="doc-img">
-        
-      </div>
-      <p class="img-caption">Harmonix Vault Stack — V1 (current state)</p>
-
-      <h3>V1 Modules</h3>
+      <h3>Harmonix Vault Stack — V1 (current state)</h3>
       <div class="arch-modules">
-        <div class="arch-module"><div class="arch-module-name">Deposits</div><div class="arch-module-desc">Entry point. Accepts user assets, mints ERC-4626 shares at current PPS.</div></div>
-        <div class="arch-module"><div class="arch-module-name">Withdraw</div><div class="arch-module-desc">Exit point. Burns shares, returns underlying assets to users.</div></div>
-        <div class="arch-module highlight"><div class="arch-module-name">Accountant</div><div class="arch-module-desc">Calculates PPS (price per share), mint/burn amounts, and fees. Central to vault accounting.</div></div>
-        <div class="arch-module highlight"><div class="arch-module-name">NAV Oracle</div><div class="arch-module-desc">Produces real-time NAV inputs that drive PPS updates in Accountant. Currently manual; being automated in V2.</div></div>
-        <div class="arch-module"><div class="arch-module-name">Manager</div><div class="arch-module-desc">Executes capital allocations to protocols (deploy, rebalance, unwind).</div></div>
-        <div class="arch-module"><div class="arch-module-name">ForDeFi</div><div class="arch-module-desc">Operational execution and custody signing for curator actions.</div></div>
-        <div class="arch-module"><div class="arch-module-name">Contract Admins</div><div class="arch-module-desc">Govern upgrades and privileged actions. Currently EOA — moving to Safe multisig in V2.</div></div>
-        <div class="arch-module"><div class="arch-module-name">Risks & Strategies</div><div class="arch-module-desc">Off-chain research, monitoring, and strategy logic that informs curator decisions.</div></div>
+        <div class="arch-module highlight">
+          <div class="arch-module-name">Deposits</div>
+          <div class="arch-module-desc">Entry point. Accepts user assets, mints ERC-4626 shares at current PPS.</div>
+        </div>
+        <div class="arch-module highlight">
+          <div class="arch-module-name">Withdraw</div>
+          <div class="arch-module-desc">Exit point. Burns shares, returns underlying assets to users.</div>
+        </div>
+        <div class="arch-module">
+          <div class="arch-module-name">Accountant</div>
+          <div class="arch-module-desc">Calculates PPS (price per share), mint/burn amounts, and fees. Central to vault accounting.</div>
+        </div>
+        <div class="arch-module">
+          <div class="arch-module-name">NAV Oracle</div>
+          <div class="arch-module-desc">Produces real-time NAV inputs that drive PPS updates in Accountant. Currently manual; being automated in V2.</div>
+        </div>
+        <div class="arch-module">
+          <div class="arch-module-name">Manager</div>
+          <div class="arch-module-desc">Executes capital allocations to protocols (deploy, rebalance, unwind).</div>
+        </div>
+        <div class="arch-module">
+          <div class="arch-module-name">ForDeFi</div>
+          <div class="arch-module-desc">Operational execution and custody signing for curator actions.</div>
+        </div>
+        <div class="arch-module">
+          <div class="arch-module-name">Contract Admins</div>
+          <div class="arch-module-desc">Govern upgrades and privileged actions. Currently EOA — moving to Safe multisig in V2.</div>
+        </div>
+        <div class="arch-module">
+          <div class="arch-module-name">Risks &amp; Strategies</div>
+          <div class="arch-module-desc">Off-chain research, monitoring, and strategy logic that informs curator decisions.</div>
+        </div>
       </div>
 
       <h2>V2 — Phase 1 Upgrades</h2>
       <p>V2 Phase 1 focuses on security hardening and operational reliability. The core flow is unchanged but every privileged action is now multisig-gated and subject to timelocks.</p>
 
-      <div class="doc-img">
-        
-      </div>
-      <p class="img-caption">Harmonix Vault Stack — V2 Phase 1</p>
-
+      <h3>Harmonix Vault Stack — V2 Phase 1</h3>
       <div class="table-wrap"><table>
         <thead><tr><th>Module</th><th>V1 State</th><th>V2 Change</th></tr></thead>
         <tbody>
@@ -1140,9 +1285,6 @@ td code { font-size: 12px; }
           <tr><td><strong>Manager</strong></td><td>ForDeFi custody (~$30k/yr)</td><td>Merkle-based permissioning (targets, selectors, params). Deploy + Fund Authority scripts.</td></tr>
         </tbody>
       </table></div>
-
-      <h2>V2 Phase 2 — In Roadmap</h2>
-      <p>Phase 2 extends the vault with proof-of-solvency UI via Accountable, partner point tracking, Pendle position visibility, Harmonix points on-chain, and multi-chain deposit support via LayerZero.</p>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('xhar',null)">
@@ -1156,88 +1298,67 @@ td code { font-size: 12px; }
 
     <!-- ── CONTRACTS ── -->
     <section class="section" id="s-contracts">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Smart Contracts</span></div>
       <div class="page-hero">
         <span class="page-tag">For Developers</span>
         <h1>Smart Contracts</h1>
         <p class="page-subtitle">All Harmonix contracts are deployed on HyperEVM. ERC-4626 standard throughout.</p>
       </div>
 
+      <h2>Integration Guide</h2>
+      <h3>Depositing (ERC-4626)</h3>
+      <p>All Harmonix vaults implement the standard ERC-4626 interface. To deposit:</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Approve</h4><p>Call <code>approve(vaultAddress, amount)</code> on the underlying asset token.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Deposit</h4><p>Call <code>deposit(assets, receiver)</code> on the vault contract.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Receive shares</h4><p>Receive ha-token shares proportional to current PPS. These compound yield into the exchange rate over time.</p></div></div>
+      </div>
+
+      <h3>Withdrawing</h3>
+      <p>In V2, withdrawals go through an on-chain queue:</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Request</h4><p>Call <code>requestWithdraw(shares)</code> — creates a pending withdrawal request.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Wait</h4><p>Wait for processing (see withdrawal timing table in Deposits &amp; Withdrawals).</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Claim</h4><p>Call <code>claimWithdraw(requestId)</code> to receive underlying assets.</p></div></div>
+      </div>
+
+      <h3>Reading NAV / Price Per Share</h3>
+      <p>Call <code>pricePerShare()</code> or <code>convertToAssets(1e18)</code> on any vault contract to get the current NAV-based exchange rate. This is updated by the automated NAV Oracle pipeline.</p>
+
       <h2>Deployed Token Contracts</h2>
-      <p>All Harmonix tokens are deployed on HyperEVM as ERC-20 tokens using a <code>TransparentUpgradeableProxy</code> / <code>ERC1967Proxy</code> pattern, consistent with the <a href="https://docs.veda.tech/" target="_blank">Veda framework</a> used for yield-bearing vault tokens.</p>
+      <p>All Harmonix tokens are deployed on HyperEVM as ERC-20 tokens using a <code>TransparentUpgradeableProxy</code> / <code>ERC1967Proxy</code> pattern, consistent with the Veda framework used for yield-bearing vault tokens.</p>
 
-      <!-- hakHYPE -->
       <div class="contract-card">
         <div class="contract-card-header">
-          <span class="t-ticker">hakHYPE</span>
-          <span style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--text);">Harmonix kHYPE</span>
-          <span class="tag green" style="margin-left:auto">ERC-20 · Proxy</span>
+          <span class="ticker-badge">hakHYPE</span>
+          <div class="card-title-block"><span class="card-name">Harmonix kHYPE</span></div>
+          <div class="card-tags"><span class="tag green">ERC-20</span><span class="tag grey">Proxy</span></div>
         </div>
-        <div class="stat-row" style="margin:0 0 16px;">
-          <div class="stat"><div class="stat-val">49,872</div><div class="stat-label">Total Supply</div></div>
-          <div class="stat"><div class="stat-val">1,308</div><div class="stat-label">Holders</div></div>
-          <div class="stat"><div class="stat-val">$1.72M</div><div class="stat-label">Market Cap</div></div>
-          <div class="stat"><div class="stat-val">$34.58</div><div class="stat-label">Price / Share</div></div>
-        </div>
-        <div class="table-wrap" style="margin:0"><table>
-          <tbody>
-            <tr><td><strong>Contract</strong></td><td><div class="addr-wrap"><code>0x1368ee9d1212ae5b26ff166049220051a9eebc42</code><button class="copy-btn" onclick="copyAddr(this,'0x1368ee9d1212ae5b26ff166049220051a9eebc42')">copy</button></div></td></tr>
-            <tr><td><strong>Decimals</strong></td><td>18</td></tr>
-            <tr><td><strong>Implementation</strong></td><td><div class="addr-wrap"><code>0xe4bA90d2...Fef9268Ea</code><button class="copy-btn" onclick="copyAddr(this,'0xe4bA90d2...Fef9268Ea')">copy</button></div></td></tr>
-            <tr><td><strong>Price</strong></td><td>$34.58 <span style="color:var(--text3)">≈ 1.210354 HYPE</span></td></tr>
-            <tr><td><strong>Transfers</strong></td><td>10,642</td></tr>
-            <tr><td><strong>Explorer</strong></td><td><a href="https://hyperscan.xyz/address/0x1368ee9d1212ae5b26ff166049220051a9eebc42" target="_blank">View on HyperScan ↗</a></td></tr>
-          </tbody>
-        </table></div>
+        <div class="contract-card-row"><span class="contract-card-label">Contract</span><div class="addr-wrap"><code>0x1368ee9d1212ae5b26ff166049220051a9eebc42</code><button class="copy-btn" onclick="copyAddr(this,'0x1368ee9d1212ae5b26ff166049220051a9eebc42')">copy</button></div></div>
+        <div class="contract-card-row"><span class="contract-card-label">Decimals</span><span class="contract-card-val">18</span></div>
+        <div class="contract-card-row"><span class="contract-card-label">Explorer</span><a href="https://hyperscan.xyz/address/0x1368ee9d1212ae5b26ff166049220051a9eebc42" target="_blank" style="font-size:13px;color:var(--green);">View on HyperScan ↗</a></div>
       </div>
 
-      <!-- haHYPE -->
       <div class="contract-card">
         <div class="contract-card-header">
-          <span class="t-ticker">haHYPE</span>
-          <span style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--text);">haHYPE</span>
-          <span class="tag green" style="margin-left:auto">ERC-20 · ERC1967Proxy</span>
+          <span class="ticker-badge">haHYPE</span>
+          <div class="card-title-block"><span class="card-name">haHYPE</span></div>
+          <div class="card-tags"><span class="tag green">ERC-20</span><span class="tag grey">ERC1967Proxy</span></div>
         </div>
-        <div class="stat-row" style="margin:0 0 16px;">
-          <div class="stat"><div class="stat-val">60,218</div><div class="stat-label">Total Supply</div></div>
-          <div class="stat"><div class="stat-val">3,185</div><div class="stat-label">Holders</div></div>
-          <div class="stat"><div class="stat-val">$2.07M</div><div class="stat-label">Market Cap</div></div>
-          <div class="stat"><div class="stat-val">$34.44</div><div class="stat-label">Price / Share</div></div>
-        </div>
-        <div class="table-wrap" style="margin:0"><table>
-          <tbody>
-            <tr><td><strong>Contract</strong></td><td><div class="addr-wrap"><code>0xfde5b0626fc80e36885e2fa9cd5ad9d7768d725c</code><button class="copy-btn" onclick="copyAddr(this,'0xfde5b0626fc80e36885e2fa9cd5ad9d7768d725c')">copy</button></div></td></tr>
-            <tr><td><strong>Decimals</strong></td><td>18</td></tr>
-            <tr><td><strong>Implementation</strong></td><td><div class="addr-wrap"><code>0x1108fE54...8C047be55</code><button class="copy-btn" onclick="copyAddr(this,'0x1108fE54...8C047be55')">copy</button></div></td></tr>
-            <tr><td><strong>Compiler</strong></td><td><code>v0.8.20</code> · Paris EVM · 200 runs</td></tr>
-            <tr><td><strong>Price</strong></td><td>$34.44 <span style="color:var(--text3)">≈ 1.208531 HYPE</span></td></tr>
-            <tr><td><strong>Transfers</strong></td><td>37,481</td></tr>
-            <tr><td><strong>Explorer</strong></td><td><a href="https://hyperscan.xyz/address/0xfde5b0626fc80e36885e2fa9cd5ad9d7768d725c" target="_blank">View on HyperScan ↗</a></td></tr>
-          </tbody>
-        </table></div>
+        <div class="contract-card-row"><span class="contract-card-label">Contract</span><div class="addr-wrap"><code>0xfde5b0626fc80e36885e2fa9cd5ad9d7768d725c</code><button class="copy-btn" onclick="copyAddr(this,'0xfde5b0626fc80e36885e2fa9cd5ad9d7768d725c')">copy</button></div></div>
+        <div class="contract-card-row"><span class="contract-card-label">Decimals</span><span class="contract-card-val">18</span></div>
+        <div class="contract-card-row"><span class="contract-card-label">Explorer</span><a href="https://hyperscan.xyz/address/0xfde5b0626fc80e36885e2fa9cd5ad9d7768d725c" target="_blank" style="font-size:13px;color:var(--green);">View on HyperScan ↗</a></div>
       </div>
 
-      <!-- HAR Token -->
       <div class="contract-card">
         <div class="contract-card-header">
-          <span class="t-ticker">HAR</span>
-          <span style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--text);">Harmonix Finance</span>
-          <span class="tag green" style="margin-left:auto">ERC-20 · TransparentUpgradeableProxy</span>
+          <span class="ticker-badge">HAR</span>
+          <div class="card-title-block"><span class="card-name">Harmonix Finance</span></div>
+          <div class="card-tags"><span class="tag green">ERC-20</span><span class="tag grey">TransparentUpgradeableProxy</span></div>
         </div>
-        <div class="stat-row" style="margin:0 0 16px;">
-          <div class="stat"><div class="stat-val">1B</div><div class="stat-label">Max Total Supply</div></div>
-          <div class="stat"><div class="stat-val">751</div><div class="stat-label">Holders</div></div>
-          <div class="stat"><div class="stat-val">74,926</div><div class="stat-label">Transfers</div></div>
-          <div class="stat"><div class="stat-val">999,999</div><div class="stat-label">Optimizer Runs</div></div>
-        </div>
-        <div class="table-wrap" style="margin:0"><table>
-          <tbody>
-            <tr><td><strong>Contract</strong></td><td><div class="addr-wrap"><code>0x391121d817da42ed3434d281aedbbcc416a2af18</code><button class="copy-btn" onclick="copyAddr(this,'0x391121d817da42ed3434d281aedbbcc416a2af18')">copy</button></div></td></tr>
-            <tr><td><strong>Decimals</strong></td><td>18</td></tr>
-            <tr><td><strong>Implementation</strong></td><td><div class="addr-wrap"><code>0xdcEAbC60...479f92744</code><button class="copy-btn" onclick="copyAddr(this,'0xdcEAbC60...479f92744')">copy</button></div></td></tr>
-            <tr><td><strong>Compiler</strong></td><td><code>v0.8.10</code> · London EVM · 999,999 runs</td></tr>
-            <tr><td><strong>Explorer</strong></td><td><a href="https://hyperscan.xyz/address/0x391121d817da42ed3434d281aedbbcc416a2af18" target="_blank">View on HyperScan ↗</a></td></tr>
-          </tbody>
-        </table></div>
+        <div class="contract-card-row"><span class="contract-card-label">Contract</span><div class="addr-wrap"><code>0x391121d817da42ed3434d281aedbbcc416a2af18</code><button class="copy-btn" onclick="copyAddr(this,'0x391121d817da42ed3434d281aedbbcc416a2af18')">copy</button></div></div>
+        <div class="contract-card-row"><span class="contract-card-label">Decimals</span><span class="contract-card-val">18</span></div>
+        <div class="contract-card-row"><span class="contract-card-label">Explorer</span><a href="https://hyperscan.xyz/address/0x391121d817da42ed3434d281aedbbcc416a2af18" target="_blank" style="font-size:13px;color:var(--green);">View on HyperScan ↗</a></div>
       </div>
 
       <h2>Full Contract Registry</h2>
@@ -1247,57 +1368,38 @@ td code { font-size: 12px; }
         <thead><tr><th>Contract</th><th>Standard</th><th>Network</th><th>Address</th></tr></thead>
         <tbody>
           <tr><td>haUSDC Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>TBD at launch</code></td></tr>
-          <tr><td>haHYPE Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>0xfde5b062...8d725c</code></td></tr>
-          <tr><td>hakHYPE Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>0x1368ee9d...9eebc42</code></td></tr>
+          <tr><td>haHYPE Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>0xfde5b062…8d725c</code></td></tr>
+          <tr><td>hakHYPE Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>0x1368ee9d…9eebc42</code></td></tr>
           <tr><td>cdharUSD1 Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>TBD at launch</code></td></tr>
           <tr><td>cdharUSD2 Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>TBD at launch</code></td></tr>
           <tr><td>cdharUSD3 Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>TBD at launch</code></td></tr>
-          <tr><td>HAR Token</td><td>ERC-20</td><td>HyperEVM</td><td><code>0x391121d8...af18</code></td></tr>
+          <tr><td>HAR Token</td><td>ERC-20</td><td>HyperEVM</td><td><code>0x391121d8…af18</code></td></tr>
           <tr><td>xHAR Vault</td><td>ERC-4626</td><td>HyperEVM</td><td><code>TBD at launch</code></td></tr>
           <tr><td>NAV Oracle</td><td>Custom</td><td>HyperEVM</td><td><code>TBD at launch</code></td></tr>
         </tbody>
       </table></div>
 
-      <div class="callout info">
-        <span class="callout-icon">🔧</span>
-        <div class="callout-body"><strong>Vault Framework:</strong> Harmonix's stablecoin yield-bearing vault tokens (haUSDC, cdharUSD series) are built using the <a href="https://docs.veda.tech/" target="_blank">Veda framework</a> — a modular, audited vault infrastructure designed for institutional-grade DeFi products. Veda provides the ERC-4626 base, role-based access control, and upgrade patterns used across the Harmonix vault stack.</div>
+      <div class="callout">
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c8f07a" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg></span>
+        <div class="callout-body"><strong>Vault Framework:</strong> Harmonix's stablecoin yield-bearing vault tokens (haUSDC, cdharUSD series) are built using the Veda framework — a modular, audited vault infrastructure designed for institutional-grade DeFi products. Veda provides the ERC-4626 base, role-based access control, and upgrade patterns used across the Harmonix vault stack.</div>
       </div>
-
-      <h2>Integration Guide</h2>
-      <h3>Depositing (ERC-4626)</h3>
-      <p>All Harmonix vaults implement the standard ERC-4626 interface. To deposit:</p>
-      <ol style="margin:10px 0 14px 18px;color:var(--text2);">
-        <li>Call <code>approve(vaultAddress, amount)</code> on the underlying asset token</li>
-        <li>Call <code>deposit(assets, receiver)</code> on the vault contract</li>
-        <li>Receive ha-token shares proportional to current PPS</li>
-      </ol>
-
-      <h3>Withdrawing</h3>
-      <p>In V2, withdrawals go through an on-chain queue:</p>
-      <ol style="margin:10px 0 14px 18px;color:var(--text2);">
-        <li>Call <code>requestWithdraw(shares)</code> — creates a pending withdrawal request</li>
-        <li>Wait for processing (see withdrawal timing table in Deposits & Withdrawals)</li>
-        <li>Call <code>claimWithdraw(requestId)</code> to receive underlying assets</li>
-      </ol>
-
-      <h3>Reading NAV / Price Per Share</h3>
-      <p>Call <code>pricePerShare()</code> or <code>convertToAssets(1e18)</code> on any vault contract to get the current NAV-based exchange rate. This is updated by the automated NAV Oracle pipeline.</p>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('vault-arch',null)">
           <span class="page-nav-dir">← Previous</span><span>Vault Architecture</span>
         </a>
         <a class="page-nav-link" onclick="show('deposits-withdrawals',null)" style="text-align:right">
-          <span class="page-nav-dir">Next →</span><span>Deposits & Withdrawals</span>
+          <span class="page-nav-dir">Next →</span><span>Deposits &amp; Withdrawals</span>
         </a>
       </div>
     </section>
 
-    <!-- ── DEPOSITS & WITHDRAWALS ── -->
+    <!-- ── DEPOSITS-WITHDRAWALS ── -->
     <section class="section" id="s-deposits-withdrawals">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Deposits &amp; Withdrawals</span></div>
       <div class="page-hero">
         <span class="page-tag">For Developers</span>
-        <h1>Deposits & Withdrawals</h1>
+        <h1>Deposits &amp; Withdrawals</h1>
         <p class="page-subtitle">How capital enters and exits Harmonix vaults, including timing, queuing, and fee mechanics.</p>
       </div>
 
@@ -1305,15 +1407,24 @@ td code { font-size: 12px; }
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <div class="step-body"><h4>Approve the vault</h4><p>Call <code>approve(vaultAddress, amount)</code> on the underlying token contract (USDC, HYPE, kHYPE, etc.).</p></div>
+          <div class="step-body">
+            <h4>Approve the vault</h4>
+            <p>Call <code>approve(vaultAddress, amount)</code> on the underlying token contract (USDC, HYPE, kHYPE, etc.).</p>
+          </div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div class="step-body"><h4>Deposit</h4><p>Call <code>deposit(assets, receiver)</code> on the vault. Shares are minted instantly at current PPS. In V2, multi-asset deposits (via swap-in path) and async deposits are supported.</p></div>
+          <div class="step-body">
+            <h4>Deposit</h4>
+            <p>Call <code>deposit(assets, receiver)</code> on the vault. Shares are minted instantly at current PPS. In V2, multi-asset deposits (via swap-in path) and async deposits are supported.</p>
+          </div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <div class="step-body"><h4>Receive ha-tokens</h4><p>You receive ERC-4626 shares (<code>haUSDC</code>, <code>haHYPE</code>, etc.) to your wallet. These compound yield into the exchange rate over time.</p></div>
+          <div class="step-body">
+            <h4>Receive ha-tokens</h4>
+            <p>You receive ERC-4626 shares (<code>haUSDC</code>, <code>haHYPE</code>, etc.) to your wallet. These compound yield into the exchange rate over time.</p>
+          </div>
         </div>
       </div>
 
@@ -1325,14 +1436,14 @@ td code { font-size: 12px; }
         <tbody>
           <tr><td><strong>Buffer Pool</strong></td><td>Request ≤ 5% of vault TVL, within buffer</td><td>~1 day</td></tr>
           <tr><td><strong>Normal Queue</strong></td><td>Request below buffer, next day settlement</td><td>1 day</td></tr>
-          <tr><td><strong>Large Withdrawal</strong></td><td>Request > 5% of vault TVL</td><td>Up to 3 days</td></tr>
+          <tr><td><strong>Large Withdrawal</strong></td><td>Request &gt; 5% of vault TVL</td><td>Up to 3 days</td></tr>
           <tr><td><strong>cdharUSD Early Exit</strong></td><td>Before term maturity</td><td>1–3 days + early exit fee</td></tr>
         </tbody>
       </table></div>
 
       <div class="callout warn">
-        <span class="callout-icon">⚠️</span>
-        <div class="callout-body">haHYPE and hakHYPE withdrawals are settled in <strong>WHYPE</strong> (wrapped HYPE on HyperEVM), not native HYPE. Native HYPE withdrawal support is planned for a future update.</div>
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#f5c842" stroke-width="2"><path d="m10.29 3.86-8.57 14.86A2 2 0 0 0 3.43 22h17.14a2 2 0 0 0 1.71-3l-8.57-14.86a2 2 0 0 0-3.42.28z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <div class="callout-body">haHYPE and hakHYPE withdrawals are settled in <strong>WHYPE</strong> (wrapped HYPE on HyperEVM), not native HYPE. Native HYPE withdrawal support is coming soon.</div>
       </div>
 
       <h2>What You Receive</h2>
@@ -1360,101 +1471,89 @@ td code { font-size: 12px; }
 
     <!-- ── SOLVENCY ── -->
     <section class="section" id="s-solvency">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Proof of Solvency</span></div>
       <div class="page-hero">
         <span class="page-tag">Security</span>
         <h1>Proof of Solvency</h1>
-        <p class="page-subtitle">Harmonix uses Accountable Capital for on-chain, verifiable proof that vault assets match liabilities in real time.</p>
+        <p class="page-subtitle">How Harmonix verifies that vault liabilities are always backed by real on-chain assets.</p>
       </div>
-
-      <div class="callout">
-        <span class="callout-icon">🟢</span>
-        <div class="callout-body">Proof of Solvency is provided by <a href="https://www.accountable.capital/" target="_blank">Accountable Capital ↗</a> — a Merkle tree-based attestation system that allows any holder to verify their position is fully backed at any point in time.</div>
-      </div>
-
-      <h2>What is Proof of Solvency?</h2>
-      <p>Accountable Capital publishes a Merkle tree of all vault positions and corresponding liabilities. Any user can cryptographically verify that their share of the vault is backed by real assets — without trusting a centralized report. The proof is generated on-chain via ForDeFi → Merkle Tree, as shown in the V1 vault architecture diagram.</p>
-
-      <h2>Coverage Per Vault</h2>
+      <p>Harmonix publishes a Merkle tree of all vault positions and corresponding liabilities. Anyone can verify that total assets exceed total share token supply at any given time — no trust required, no waiting for an audit cycle.</p>
       <div class="table-wrap"><table>
-        <thead><tr><th>Vault</th><th>Proof Available</th><th>Notes</th></tr></thead>
+        <thead><tr><th>Vault</th><th>Coverage</th><th>Verification</th></tr></thead>
         <tbody>
-          <tr><td>haUSDC</td><td>Included in V2 Phase 2 roadmap</td></tr>
-          <tr><td>haHYPE</td><td>—</td></tr>
-          <tr><td>hakHYPE</td><td>—</td></tr>
-          <tr><td>cdharUSD1/2/3</td><td>Post-V2 Phase 2</td></tr>
+          <tr><td>haUSDC</td><td>100% on-chain, fully verifiable</td><td>Merkle proof + HyperEVM state</td></tr>
+          <tr><td>haHYPE</td><td>100% on-chain, fully verifiable</td><td>Merkle proof + HyperEVM state</td></tr>
+          <tr><td>hakHYPE</td><td>100% on-chain, fully verifiable</td><td>Merkle proof + HyperEVM state</td></tr>
         </tbody>
       </table></div>
-
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('deposits-withdrawals',null)">
-          <span class="page-nav-dir">← Previous</span><span>Deposits & Withdrawals</span>
+          <span class="page-nav-dir">← Previous</span><span>Deposits &amp; Withdrawals</span>
         </a>
         <a class="page-nav-link" onclick="show('risks',null)" style="text-align:right">
-          <span class="page-nav-dir">Next →</span><span>Risks & Audits</span>
+          <span class="page-nav-dir">Next →</span><span>Risks &amp; Audits</span>
         </a>
       </div>
     </section>
 
     <!-- ── RISKS ── -->
     <section class="section" id="s-risks">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Risks &amp; Audits</span></div>
       <div class="page-hero">
         <span class="page-tag">Security</span>
-        <h1>Risks & Audits</h1>
-        <p class="page-subtitle">Understand the risk surface of each Harmonix product before depositing.</p>
+        <h1>Risks &amp; Audits</h1>
+        <p class="page-subtitle">Platform-wide risk disclosures and security audit information.</p>
       </div>
-
-      <div class="callout">
-        <span class="callout-icon">🔐</span>
-        <div class="callout-body">Harmonix contracts are audited by <strong>Verichains</strong>, <strong>Shieldify</strong>, and <strong>Zenith</strong>. Audit reports will be published at V2 mainnet launch.</div>
-      </div>
-
-      <h2>Product-Level Risks</h2>
       <div class="table-wrap"><table>
-        <thead><tr><th>Risk</th><th>Applies To</th><th>Mitigation</th></tr></thead>
+        <thead><tr><th>Risk</th><th>Products Affected</th><th>Mitigation</th></tr></thead>
         <tbody>
-          <tr><td><strong>Directional HYPE exposure</strong></td><td>haHYPE, hakHYPE</td><td>Delta-neutral sub-strategy reduces beta on hedged portion. Residual directional exposure remains. Not a market-neutral product.</td></tr>
-          <tr><td><strong>Funding rate turns negative</strong></td><td>All vaults</td><td>Real-time monitoring. If funding turns negative, position sizing is adjusted or the leg is exited. Capital rotates into lending/staking.</td></tr>
-          <tr><td><strong>Pendle PT maturity</strong></td><td>haHYPE, hakHYPE</td><td>Positions are sized conservatively and rolled ahead of maturity.</td></tr>
-          <tr><td><strong>Smart contract risk</strong></td><td>All vaults</td><td>Audited by Verichains, Shieldify, Zenith. Multisig + timelock on upgrades in V2.</td></tr>
-          <tr><td><strong>HAR conversion price risk</strong></td><td>cdharUSD</td><td>If HAR is below locked conversion price at maturity, the right has no intrinsic value. Principal and yield unaffected.</td></tr>
-          <tr><td><strong>Venue / protocol risk</strong></td><td>All vaults</td><td>Capital diversified across multiple HyperEVM protocols. Each carries independent smart contract and liquidity risk.</td></tr>
-          <tr><td><strong>Yield variability</strong></td><td>All vaults</td><td>Yield is not fixed or guaranteed. APY ranges are targets, not guarantees.</td></tr>
+          <tr><td>Funding rate turns negative</td><td>haUSDC, haHYPE, hakHYPE, cdharUSD</td><td>Real-time monitoring, automatic rotation to lending/staking</td></tr>
+          <tr><td>Directional HYPE exposure</td><td>haHYPE, hakHYPE</td><td>Delta-neutral sub-strategy reduces but does not eliminate exposure</td></tr>
+          <tr><td>Smart contract vulnerability</td><td>All products</td><td>Audited by Verichains, Shieldify, Zenith</td></tr>
+          <tr><td>Venue / counterparty risk</td><td>All products</td><td>Diversified across HyperEVM protocols; no single-venue concentration</td></tr>
+          <tr><td>Pendle PT maturity</td><td>haHYPE, hakHYPE</td><td>Positions rolled ahead of maturity</td></tr>
+          <tr><td>HAR conversion price risk</td><td>cdharUSD</td><td>Conversion always optional; principal unaffected if HAR below locked price</td></tr>
         </tbody>
       </table></div>
-
+      <div class="callout danger">
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,90,80,0.85)" stroke-width="1.7" width="18" height="18"><path d="m10.29 3.86-8.57 14.86A2 2 0 0 0 3.43 22h17.14a2 2 0 0 0 1.71-3l-8.57-14.86a2 2 0 0 0-3.42.28z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <div class="callout-body">Interacting with Harmonix involves financial risk. This page is not exhaustive. Always review the complete risks before depositing capital.</div>
+      </div>
+      <h2>Audits</h2>
+      <p>Contracts are audited by <strong>Verichains</strong>, <strong>Shieldify</strong>, and <strong>Zenith</strong>. Audit reports will be published at V2 mainnet launch.</p>
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('solvency',null)">
           <span class="page-nav-dir">← Previous</span><span>Proof of Solvency</span>
         </a>
         <a class="page-nav-link" onclick="show('points',null)" style="text-align:right">
-          <span class="page-nav-dir">Next →</span><span>Points & Rewards</span>
+          <span class="page-nav-dir">Next →</span><span>Points &amp; Rewards</span>
         </a>
       </div>
     </section>
 
     <!-- ── POINTS ── -->
     <section class="section" id="s-points">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">Points &amp; Rewards</span></div>
       <div class="page-hero">
         <span class="page-tag">Resources</span>
-        <h1>Points & Rewards</h1>
-        <p class="page-subtitle">How Harmonix Points accrue and how partner protocol points interact with Harmonix positions.</p>
+        <h1>Points &amp; Rewards</h1>
+        <p class="page-subtitle">How Harmonix Points accrue and how partner protocol point programs interact with Harmonix activity.</p>
       </div>
-
+      <p>Points accrue automatically into your position — no claiming or staking step required. Holding ha-tokens is sufficient. All programs run in parallel, meaning a single deposit simultaneously accrues Harmonix Points and multiple partner protocol point rewards.</p>
       <div class="table-wrap"><table>
-        <thead><tr><th>Product</th><th>Point Programs</th></tr></thead>
+        <thead><tr><th>Product</th><th>Harmonix Points</th><th>Partner Points</th></tr></thead>
         <tbody>
-          <tr><td>haUSDC</td><td>Harmonix Points, Tradexyz, Hyna</td></tr>
-          <tr><td>haHYPE</td><td>Harmonix Points, HyperLend, Felix, HypurrFi, kPoints, Ventuals</td></tr>
-          <tr><td>hakHYPE</td><td>Harmonix Points, HyperLend, HypurrFi</td></tr>
-          <tr><td>cdharUSD1/2/3</td><td>HIP-3 Points, HyperEVM Incentives</td></tr>
+          <tr><td>haUSDC</td><td>✓</td><td>Tradexyz, Hyna</td></tr>
+          <tr><td>haUSDT</td><td>✓</td><td>—</td></tr>
+          <tr><td>haUSDH</td><td>✓</td><td>—</td></tr>
+          <tr><td>haHYPE</td><td>✓</td><td>HyperLend, Felix, HypurrFi, kPoints, Ventuals</td></tr>
+          <tr><td>hakHYPE</td><td>✓</td><td>HyperLend, HypurrFi</td></tr>
+          <tr><td>cdharUSD3</td><td>✓</td><td>HIP-3 points, HyperEVM incentives</td></tr>
         </tbody>
       </table></div>
-
-      <p>Points accrue automatically into your position. No claiming or staking step is required — holding the ha-token is sufficient. Point history and per-product breakdowns will be visible in the app UI (in V2 Phase 2 roadmap as "UI: Point History").</p>
-
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('risks',null)">
-          <span class="page-nav-dir">← Previous</span><span>Risks & Audits</span>
+          <span class="page-nav-dir">← Previous</span><span>Risks &amp; Audits</span>
         </a>
         <a class="page-nav-link" onclick="show('faq',null)" style="text-align:right">
           <span class="page-nav-dir">Next →</span><span>FAQ</span>
@@ -1464,6 +1563,7 @@ td code { font-size: 12px; }
 
     <!-- ── FAQ ── -->
     <section class="section" id="s-faq">
+      <div class="page-breadcrumb"><span onclick="show('welcome',null)">Harmonix Docs</span><span class="bc-sep">›</span><span class="bc-current">FAQ</span></div>
       <div class="page-hero">
         <span class="page-tag">Resources</span>
         <h1>FAQ</h1>
@@ -1472,57 +1572,50 @@ td code { font-size: 12px; }
 
       <h2>Products</h2>
       <h3>Is haUSDC delta-neutral?</h3>
-      <p>Yes. haUSDC is fully market-neutral — capital is deployed into delta-neutral strategies that eliminate directional price exposure. The $1 peg is maintained through the hedged structure, not a redemption guarantee.</p>
-
+      <p>Yes. haUSDC is fully market-neutral — capital is deployed into delta-neutral strategies that eliminate directional price exposure. Yield compounds continuously into the share price.</p>
       <h3>Are haHYPE and hakHYPE delta-neutral?</h3>
-      <p>No. haHYPE and hakHYPE are <em>not</em> fully delta-neutral products. A sub-strategy within each vault runs a delta-neutral position to reduce net beta, but the overall product carries directional HYPE exposure. If HYPE price changes, your position value changes accordingly on the non-hedged portion.</p>
-
+      <p>No. haHYPE and hakHYPE are not fully delta-neutral products. A sub-strategy within each vault runs a delta-neutral position to reduce net beta, but the overall product carries directional HYPE exposure. If HYPE price changes, your position value changes accordingly on the non-hedged portion.</p>
       <h3>What is the difference between cdharUSD1, cdharUSD2, and cdharUSD3?</h3>
-      <p>Only the lock term differs. cdharUSD1 = 1-month lock, cdharUSD2 = 2-month lock, cdharUSD3 = 3-month lock. All three use the same yield engine and HAR conversion mechanic.</p>
-
+      <p>Only the lock term differs. cdharUSD1 = 1-month lock, cdharUSD2 = 2-month, cdharUSD3 = 3-month. All three use the same yield engine and HAR conversion mechanic.</p>
       <h3>Do I have to convert into HAR at cdharUSD maturity?</h3>
-      <p>No. Conversion is always optional. If HAR is trading below your locked conversion price, the right has no value and you simply redeem stablecoins plus yield — identical to holding haUSDC for the term.</p>
-
+      <p>No. Conversion is always optional. If HAR is trading below your locked conversion price, the right has no value and you simply redeem stablecoins plus yield.</p>
       <h3>Does yield pay out automatically?</h3>
       <p>Yes. Yield accrues into the share price continuously. There is no claim step — holding the ha-token is sufficient. When you redeem, you receive more of the underlying than you deposited.</p>
-
       <h3>Why are haHYPE withdrawals in WHYPE and not HYPE?</h3>
       <p>WHYPE is the HyperEVM-native wrapped form of HYPE. Native HYPE withdrawal support is on the roadmap for a future update.</p>
 
       <h2>Architecture</h2>
       <h3>What is HIP-3?</h3>
       <p>HIP-3 is Hyperliquid's native standard for yield-bearing spot tokens. Harmonix uses three HIP-3 markets — Felix (feUSD), Ondo (USDY), and Hyna (sUSDe) — as strategy inputs. These tokens trade natively on HyperCore spot markets, enabling Harmonix to earn their underlying yield without bridges.</p>
-
       <h3>What oracle does Harmonix use?</h3>
       <p>haHYPE and hakHYPE use Pyth Network for NAV pricing and collateral valuation. haUSDC is evaluating Pyth or Chainlink for V2 — decision TBD at launch.</p>
-
       <h3>Is Harmonix audited?</h3>
       <p>Yes. Contracts are audited by Verichains, Shieldify, and Zenith. Audit reports will be published at V2 mainnet launch.</p>
 
       <div class="page-nav">
         <a class="page-nav-link" onclick="show('points',null)">
-          <span class="page-nav-dir">← Previous</span><span>Points & Rewards</span>
+          <span class="page-nav-dir">← Previous</span><span>Points &amp; Rewards</span>
         </a>
         <div></div>
       </div>
     </section>
 
+
   </div><!-- /content -->
 </main>
-
 <script>
 const pages = {
   welcome: 'Welcome',
   overview: 'Protocol Overview',
+  'product-suite': 'Product Suite',
   architecture: 'Technical Architecture',
-  stablecoins: 'haUSDC',
-  tokens: 'haHYPE & hakHYPE',
+  stablecoins: 'Yield-Bearing Stablecoins',
+  tokens: 'Yield-Bearing Tokens',
   cdharusd: 'cdharUSD',
   har: 'HAR Token',
   xhar: 'xHAR',
   'vault-arch': 'Vault Architecture',
   contracts: 'Smart Contracts',
-  hip3: 'HIP-3 Integration',
   'deposits-withdrawals': 'Deposits & Withdrawals',
   solvency: 'Proof of Solvency',
   risks: 'Risks & Audits',
@@ -1569,6 +1662,53 @@ function copyAddr(btn, addr) {
   });
 }
 
+
+function toggleNav(el) {
+  el.classList.toggle('open');
+  var collapse = el.nextElementSibling;
+  if (collapse) collapse.classList.toggle('open');
+}
+
+
+function buildTOC() {
+  var nav = document.getElementById('toc-nav');
+  if (!nav) return;
+  nav.innerHTML = '';
+  var section = document.querySelector('.section.active');
+  if (!section) return;
+  var headings = section.querySelectorAll('h2, h3');
+  if (headings.length === 0) {
+    document.getElementById('toc-sidebar').style.display = 'none';
+    return;
+  }
+  document.getElementById('toc-sidebar').style.display = '';
+  headings.forEach(function(h, i) {
+    // give heading an id if missing
+    if (!h.id) h.id = 'toc-h-' + i;
+    var a = document.createElement('a');
+    a.className = 'toc-link' + (h.tagName === 'H3' ? ' toc-h3' : '');
+    a.textContent = h.textContent;
+    a.onclick = function() {
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      nav.querySelectorAll('.toc-link').forEach(function(l){ l.classList.remove('active'); });
+      a.classList.add('active');
+    };
+    nav.appendChild(a);
+  });
+  // highlight first by default
+  if (nav.firstChild) nav.firstChild.classList.add('active');
+}
+
+// patch show() to rebuild TOC on page change
+var _origShow = show;
+show = function(id, el) {
+  _origShow(id, el);
+  buildTOC();
+  // scroll content back to top
+};
+
+document.addEventListener('DOMContentLoaded', function() { buildTOC(); });
+
 function filterNav(q) {
   const items = document.querySelectorAll('#sidebar-nav-wrap .nav-item');
   const groups = document.querySelectorAll('#sidebar-nav-wrap .nav-group');
@@ -1589,5 +1729,5 @@ function filterNav(q) {
   });
 }
 </script>
+<script>if(typeof lucide!=="undefined")lucide.createIcons();</script>
 </body>
-</html>
