@@ -31,11 +31,12 @@ body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', 
 ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
 /* ─── SIDEBAR ─── */
-.sidebar { overflow-y: auto;
-  width: var(--sidebar); min-height: 100vh; background: var(--bg2);
+.sidebar {
+  width: var(--sidebar); height: 100vh; background: var(--bg2);
   border-right: 1px solid var(--border); position: fixed; top: 0; left: 0;
   display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
 }
+.sidebar-nav { overflow-y: auto; flex: 1; }
 .sidebar-logo {
   padding: 24px 20px 18px; border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 10px;
@@ -52,7 +53,7 @@ body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', 
   padding: 2px 7px; border-radius: 4px;
 }
 
-.sidebar-nav { padding: 12px 0 32px; flex: 1; }
+.sidebar-nav { padding: 12px 0 32px; flex: 1; min-height: 0; overflow-y: auto; }
 .nav-group { margin-bottom: 4px; }
 .nav-label {
   font-size: 10px; font-weight: 600; letter-spacing: 1.1px; text-transform: uppercase;
@@ -1780,7 +1781,7 @@ html, body {
       </div>
 
       <div class="callout info">
-        <span class="callout-icon">🛡️</span>
+        <span class="callout-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#c8f07a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
         <div class="callout-body"><strong>Real-time monitoring:</strong> In addition to audits, Harmonix uses <strong>Hypernative</strong> for continuous on-chain risk monitoring — detecting anomalies, suspicious activity, and potential exploits before they can cause harm.</div>
       </div>
 
